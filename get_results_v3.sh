@@ -35,3 +35,5 @@ do
     done
     echo $i" "$(bc<<<"scale=3;$res/$N") >> 'results_K_v3.csv'
 done
+
+gnuplot gnuplot_commands_v3.plt

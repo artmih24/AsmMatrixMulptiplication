@@ -36,7 +36,8 @@ int main(int argc, char* argv[]) {
         *C3 = new float[sizeC],
         *C4 = new float[sizeC],
         *C5 = new float[sizeC],
-        *C6 = new float[sizeC];
+        *C6 = new float[sizeC],
+        *C7 = new float[sizeC];
     MatrixInitBy0(A, sizeA);
     MatrixInitBy0(B, sizeB);
     MatrixInitBy0(C, sizeC);
@@ -45,6 +46,7 @@ int main(int argc, char* argv[]) {
     MatrixInitBy0(C4, sizeC);
     MatrixInitBy0(C5, sizeC);
     MatrixInitBy0(C6, sizeC);
+    MatrixInitBy0(C7, sizeC);
     if (argc == 5) {
         char argRandom[] = "--random",
             argIncrement[] = "--increment";
@@ -73,18 +75,20 @@ int main(int argc, char* argv[]) {
     MatrixMulTime(FuncMatrixMulTest, A, B, C3, sizeM, sizeN, sizeK);
     MatrixMulTime(FuncAsmMatrixMul, A, B, C4, sizeM, sizeN, sizeK);
     MatrixMulTime(FuncAsmMatrixMulV2, A, B, C5, sizeM, sizeN, sizeK);
-    //MatrixMulTime(FuncAsmMatrixMulV3, A, B, C6, sizeM, sizeN, sizeK);
+    MatrixMulTime(FuncAsmMatrixMulV3, A, B, C6, sizeM, sizeN, sizeK);
+    MatrixMulTime(FuncAsmMatrixMulV4, A, B, C7, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncAsmMatrixMulN, A, B, C4, sizeM, sizeN, sizeK, 9);
     //MatrixMulTime(FuncAsmMatrixMulV2N, A, B, C5, sizeM, sizeN, sizeK, 9);
-    MatrixMulTime(FuncAsmMatrixMulV3N, A, B, C6, sizeM, sizeN, sizeK, 9);
-    //MatrixPrint(C, sizeC, sizeK);
-    //MatrixPrint(C4, sizeC, sizeK);
-    //MatrixPrint(C5, sizeC, sizeK);
+    //MatrixMulTime(FuncAsmMatrixMulV3N, A, B, C6, sizeM, sizeN, sizeK, 9);
+    MatrixPrint(C, sizeC, sizeK);
+    MatrixPrint(C4, sizeC, sizeK);
+    MatrixPrint(C5, sizeC, sizeK);
     //MatrixPrint(C6, sizeC, sizeK);
+    MatrixPrint(C7, sizeC, sizeK);
     // printf("\u0394 max = %f\n", MaxDiff(C, C4, sizeM * sizeK, sizeK));
     // printf("\u0394 avg = %f\n", AvgDiff(C, C4, sizeM * sizeK));
     // printf("\u03B4 max = %f\n", RelMaxDiff(C, C4, sizeM * sizeK));
     // printf("\u03B4 avg = %f\n", RelAvgDiff(C, C4, sizeM * sizeK));
-    delete[] A, B, C, C2, C3, C4, C5, C6;
+    delete[] A, B, C, C2, C3, C4, C5, C6, C7;
     return 0;
 }

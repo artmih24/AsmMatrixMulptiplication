@@ -157,13 +157,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz;
+            tacts = time_in_seconds * i7_4790K_Hz_Boost;
             tacts_theoretical = sizeM * sizeN * sizeK / 8;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);
             // printf("%d tacts theoretical\n", tacts_theoretical);
             // printf("%f %% performance\n\n", performance * 100);
-            //printf("%f\n", performance * 100);
+            printf("%f\n", performance * 100);
             //MatrixPrint(C, sizeM * sizeK, sizeK);
             break;
         case (FuncAsmMatrixMulV2):
@@ -179,7 +179,7 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz;
+            tacts = time_in_seconds * i7_4790K_Hz_Boost;
             tacts_theoretical = sizeM * sizeN * sizeK / 8;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);
@@ -201,7 +201,29 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz;
+            tacts = time_in_seconds * i7_4790K_Hz_Boost;
+            tacts_theoretical = sizeM * sizeN * sizeK / 8;
+            performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+            // printf("%d tacts\n", tacts);
+            // printf("%d tacts theoretical\n", tacts_theoretical);
+            // printf("%f %% performance\n\n", performance * 100);
+            printf("%f\n", performance * 100);
+            //MatrixPrint(C, sizeM * sizeK, sizeK);
+            break;
+        case (FuncAsmMatrixMulV4):
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            AsmMatrixMulV4(A, B, C, sizeM, sizeN, sizeK);
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            break;
+        case (FuncAsmMatrixMulV4N):
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            for (int i = 0; i < N; i++)
+                AsmMatrixMulV4(A, B, C, sizeM, sizeN, sizeK);
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            timeC = diff(start, end);
+            time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
+            //printf("%f sec\n", time_in_seconds);
+            tacts = time_in_seconds * i7_4790K_Hz_Boost;
             tacts_theoretical = sizeM * sizeN * sizeK / 8;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);

@@ -9,6 +9,7 @@
 #include "asmfunctions.h"
 
 #define i7_4790K_Hz 4e9
+#define i7_4790K_Hz_Boost 4.4e9
 
 enum FuncsMatrMul {
     FuncMatrixMul,

@@ -20,3 +20,5 @@ for i in {16..16384..16}
 do
     echo $i" "$(./a.out --increment 64 64 $i) >> 'results_K_1_v3.csv'
 done
+
+gnuplot gnuplot_commands_1_v3.plt
