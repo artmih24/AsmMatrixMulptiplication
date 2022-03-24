@@ -33,7 +33,9 @@ enum FuncsMatrMul {
     FuncAsmMatrixMulV4,
     FuncAsmMatrixMulV4N,
     FuncAsmMatrixMulV5,
-    FuncAsmMatrixMulV5N
+    FuncAsmMatrixMulV5N,
+    FuncAsmMatrixMulBlockV5,
+    FuncAsmMatrixMulBlockV5N
 };
 
 timespec diff(timespec start, timespec end);
@@ -53,6 +55,10 @@ int AsmMatrixMulV2(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK
 int AsmMatrixMulV3(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 int AsmMatrixMulV4(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
+
+int AsmMatrixMulV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
+
+int AsmMatrixMulBlockV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 int MatrixInitBy0(float *M, int sizeM);
 

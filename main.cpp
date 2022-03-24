@@ -37,7 +37,8 @@ int main(int argc, char* argv[]) {
         *C4 = new float[sizeC],
         *C5 = new float[sizeC],
         *C6 = new float[sizeC],
-        *C7 = new float[sizeC];
+        *C7 = new float[sizeC],
+        *C8 = new float[sizeC];
     MatrixInitBy0(A, sizeA);
     MatrixInitBy0(B, sizeB);
     MatrixInitBy0(C, sizeC);
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
     MatrixInitBy0(C5, sizeC);
     MatrixInitBy0(C6, sizeC);
     MatrixInitBy0(C7, sizeC);
+    MatrixInitBy0(C8, sizeC);
     if (argc == 5) {
         char argRandom[] = "--random",
             argIncrement[] = "--increment";
@@ -70,22 +72,30 @@ int main(int argc, char* argv[]) {
     }
     //MatrixPrint(A, sizeA, sizeN);
     //MatrixPrint(B, sizeB, sizeK);
-    MatrixMulTime(FuncMatrixMul1, A, B, C, sizeM, sizeN, sizeK);
+    //MatrixMulTime(FuncMatrixMul1, A, B, C, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncMatrixMul, A, B, C2, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncMatrixMulTest, A, B, C3, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncAsmMatrixMul, A, B, C4, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncAsmMatrixMulV2, A, B, C5, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncAsmMatrixMulV3, A, B, C6, sizeM, sizeN, sizeK);
     //MatrixMulTime(FuncAsmMatrixMulV4, A, B, C7, sizeM, sizeN, sizeK);
+    //MatrixMulTime(FuncAsmMatrixMulV5, A, B, C8, sizeM, sizeN, sizeK);
+
     //MatrixMulTime(FuncAsmMatrixMulN, A, B, C4, sizeM, sizeN, sizeK, 9);
     //MatrixMulTime(FuncAsmMatrixMulV2N, A, B, C5, sizeM, sizeN, sizeK, 9);
     //MatrixMulTime(FuncAsmMatrixMulV3N, A, B, C6, sizeM, sizeN, sizeK, 9);
-    // MatrixPrint(C, sizeC, sizeK);
+    //MatrixMulTime(FuncAsmMatrixMulV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
+    MatrixMulTime(FuncAsmMatrixMulBlockV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
+
+    //MatrixPrint(C, sizeC, sizeK);
     // MatrixPrint(C4, sizeC, sizeK);
     // MatrixPrint(C5, sizeC, sizeK);
     // MatrixPrint(C6, sizeC, sizeK);
-    //MatrixPrint(C7, sizeC, sizeK);
-    PrintDiff(C, C6, sizeM * sizeK, sizeK);
-    delete[] A, B, C, C2, C3, C4, C5, C6, C7;
+    // MatrixPrint(C7, sizeC, sizeK);
+    //MatrixPrint(C8, sizeC, sizeK);
+
+    //PrintDiff(C, C8, sizeM * sizeK, sizeK);
+
+    delete[] A, B, C, C2, C3, C4, C5, C6, C7, C8;
     return 0;
 }
