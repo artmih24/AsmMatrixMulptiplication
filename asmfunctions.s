@@ -1,6 +1,95 @@
 # %rdi, %rsi, %rdx, %rcx, %r8, %r9, далее стек
 .text                                           # начало программы
-.global AsmPartSum, AsmPartSumV2, AsmPartSumV3, AsmPartSumV4  # делаем функцию видимой для Си
+.global AsmPartSum, AsmPartSumV2, AsmPartSumV3, AsmPartSumV4, AsmPartSumV5  # делаем функцию видимой для Си
+
+
+
+AsmPartSumV5:                                   # начало функции
+    # %rdi - матрица A
+    # %rsi - матрица B
+    # %rdx - матрица C
+    # %rcx - sizeN - кол-во столбцов матрицы А / строк матрицы В
+    # %r8  - sizeK - длина строки матрицы С
+    movq            $0,                 %r10    # счетчик цикла
+    movq            %rdx,               %r12    # сохраняем в r12 значение указателя на С в rdx
+    vmovups         (%rdx),             %ymm6   # заполнение ymm6 элементами фрагмента строки матрицы C
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C
+    vmovups         (%rdx),             %ymm7   # заполнение ymm7 элементами фрагмента строки матрицы C
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C  
+    vmovups         (%rdx),             %ymm8   # заполнение ymm8 элементами фрагмента строки матрицы C
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C  
+    vmovups         (%rdx),             %ymm9   # заполнение ymm9 элементами фрагмента строки матрицы C        
+label1v5:
+    movq            %rdi,               %r13    # сохраняем в r13 значение указателя на A в rdi
+    vbroadcastss    (%rdi),             %ymm0   # заполнение ymm0 одинаковыми элементами фрагмента строки матрицы А
+    leaq            (%rdi, %rcx, 4),    %rdi    # смещение на следующую строку матрицы A 
+    vbroadcastss    (%rdi),             %ymm1   # заполнение ymm1 одинаковыми элементами фрагмента строки матрицы А
+    leaq            (%rdi, %rcx, 4),    %rdi    # смещение на следующую строку матрицы A  
+    vbroadcastss    (%rdi),             %ymm2   # заполнение ymm2 одинаковыми элементами фрагмента строки матрицы А
+    leaq            (%rdi, %rcx, 4),    %rdi    # смещение на следующую строку матрицы A  
+    vbroadcastss    (%rdi),             %ymm3   # заполнение ymm3 одинаковыми элементами фрагмента строки матрицы А  
+    movq            %r13,               %rdi    # выгружаем из r13 адрес A
+    leaq            4(%rdi),            %rdi    # смещение на следующий столбец матрицы А
+    vmovups         (%rsi),             %ymm4   # заполнение ymm4 элементами фрагмента строки матрицы В
+    leaq            (%rsi, %r8, 4),     %rsi    # смещение на следующую строку матрицы В
+    vfmadd231ps     %ymm0, %ymm4,       %ymm6   # ymm6 += ymm0 * ymm4
+    vfmadd231ps     %ymm1, %ymm4,       %ymm7   # ymm7 += ymm1 * ymm4
+    vfmadd231ps     %ymm2, %ymm4,       %ymm8   # ymm8 += ymm2 * ymm4
+    vfmadd231ps     %ymm3, %ymm4,       %ymm9   # ymm9 += ymm3 * ymm4
+    inc             %r10                        # увеличиваем значение счетчика цикла
+    cmpq            %r10,               %rcx    # сравниваем счетчик цикла с кол-вом строк В
+    jne label1v5                                # если они не равны, то повторяем цикл снова
+    movq            %r12,               %rdx    # выгружаем из r12 адрес С
+    vmovups         %ymm6,              (%rdx)  # запись ymm6 по адресу rdx
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C 
+    vmovups         %ymm7,              (%rdx)  # запись ymm6 по адресу rdx
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C 
+    vmovups         %ymm8,              (%rdx)  # запись ymm6 по адресу rdx
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C 
+    vmovups         %ymm9,              (%rdx)  # запись ymm6 по адресу rdx
+
+    movq            $0,                 %r10    # счетчик цикла
+    leaq            4(%rdx, %r8, 4),    %rdx    # смещение на следующую строку матрицы C
+    movq            %rdx,               %r12    # сохраняем в r12 значение указателя на С в rdx
+    vmovups         (%rdx),             %ymm6   # заполнение ymm6 элементами фрагмента строки матрицы C
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C
+    vmovups         (%rdx),             %ymm7   # заполнение ymm7 элементами фрагмента строки матрицы C
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C  
+    vmovups         (%rdx),             %ymm8   # заполнение ymm8 элементами фрагмента строки матрицы C
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C  
+    vmovups         (%rdx),             %ymm9   # заполнение ymm9 элементами фрагмента строки матрицы C        
+label2v5:
+    leaq            4(%rdi, %rcx, 4),   %rdi    # смещение на следующую строку матрицы A  
+    movq            %rdi,               %r13    # сохраняем в r13 значение указателя на A в rdi
+    vbroadcastss    (%rdi),             %ymm0   # заполнение ymm0 одинаковыми элементами фрагмента строки матрицы А
+    leaq            (%rdi, %rcx, 4),    %rdi    # смещение на следующую строку матрицы A 
+    vbroadcastss    (%rdi),             %ymm1   # заполнение ymm1 одинаковыми элементами фрагмента строки матрицы А
+    leaq            (%rdi, %rcx, 4),    %rdi    # смещение на следующую строку матрицы A  
+    vbroadcastss    (%rdi),             %ymm2   # заполнение ymm2 одинаковыми элементами фрагмента строки матрицы А
+    leaq            (%rdi, %rcx, 4),    %rdi    # смещение на следующую строку матрицы A  
+    vbroadcastss    (%rdi),             %ymm3   # заполнение ymm3 одинаковыми элементами фрагмента строки матрицы А  
+    movq            %r13,               %rdi    # выгружаем из r13 адрес A
+    leaq            4(%rdi),            %rdi    # смещение на следующий столбец матрицы А
+    vmovups         (%rsi),             %ymm4   # заполнение ymm4 элементами фрагмента строки матрицы В
+    leaq            (%rsi, %r8, 4),     %rsi    # смещение на следующую строку матрицы В
+    vfmadd231ps     %ymm0, %ymm4,       %ymm6   # ymm6 += ymm0 * ymm4
+    vfmadd231ps     %ymm1, %ymm4,       %ymm7   # ymm7 += ymm1 * ymm4
+    vfmadd231ps     %ymm2, %ymm4,       %ymm8   # ymm8 += ymm2 * ymm4
+    vfmadd231ps     %ymm3, %ymm4,       %ymm9   # ymm9 += ymm3 * ymm4
+    inc             %r10                        # увеличиваем значение счетчика цикла
+    cmpq            %r10,               %rcx    # сравниваем счетчик цикла с кол-вом строк В
+    jne label2v5                                # если они не равны, то повторяем цикл снова
+    movq            %r12,               %rdx    # выгружаем из r12 адрес С
+    vmovups         %ymm6,              (%rdx)  # запись ymm6 по адресу rdx
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C 
+    vmovups         %ymm7,              (%rdx)  # запись ymm6 по адресу rdx
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C 
+    vmovups         %ymm8,              (%rdx)  # запись ymm6 по адресу rdx
+    leaq            (%rdx, %r8, 4),     %rdx    # смещение на следующую строку матрицы C 
+    vmovups         %ymm9,              (%rdx)  # запись ymm6 по адресу rdx
+    ret     
+
+
 
 AsmPartSumV4:                                   # начало функции
     # %rdi - матрица A
@@ -12,30 +101,30 @@ AsmPartSumV4:                                   # начало функции
     movq            $0,                 %r10    # счетчик цикла
     movq            %r8,                %r14    # сохраняем длину строки матрицы С в r14
     cmpq            $1,                 %r9
-    jne label2
+    jne label2v4
     subq            $8,                 %r14    # и отнимаем от нее 8
-label2:
+label2v4:
     movq            %rdx,               %r12    # сохраняем в r12 значение указателя на С в rdx
     vmovups         (%rdx),             %ymm6   # заполнение ymm6 элементами фрагмента строки матрицы C
     cmpq            $1,                 %r9
-    jne label3
+    jne label3v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C
     vmovups         (%rdx),             %ymm7   # заполнение ymm7 элементами фрагмента строки матрицы C
-label3:
+label3v4:
     leaq            (%rdx, %r14, 4),    %rdx    # смещение на следующую строку матрицы C  
     vmovups         (%rdx),             %ymm8   # заполнение ymm8 элементами фрагмента строки матрицы C
     cmpq            $1,                 %r9
-    jne label4
+    jne label4v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C
     vmovups         (%rdx),             %ymm9   # заполнение ymm9 элементами фрагмента строки матрицы C
-label4:
+label4v4:
     leaq            (%rdx, %r14, 4),    %rdx    # смещение на следующую строку матрицы C  
     vmovups         (%rdx),             %ymm10  # заполнение ymm10 элементами фрагмента строки матрицы C
     cmpq            $1,                 %r9
-    jne label5
+    jne label5v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C
     vmovups         (%rdx),             %ymm11  # заполнение ymm11 элементами фрагмента строки матрицы C
-label5:
+label5v4:
     leaq            (%rdx, %r14, 4),    %rdx    # смещение на следующую строку матрицы C  
     vmovups         (%rdx),             %ymm12  # заполнение ymm12 элементами фрагмента строки матрицы C
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C  
@@ -53,53 +142,53 @@ label1v4:
     leaq            4(%rdi),            %rdi    # смещение на следующий столбец матрицы А
     vmovups         (%rsi),             %ymm4   # заполнение ymm4 элементами фрагмента строки матрицы В
     cmpq            $1,                 %r9
-    jne label6
+    jne label6v4
     leaq            32(%rsi),           %rsi    # смещение на следующую часть строки матрицы В
     vmovups         (%rsi),             %ymm5   # заполнение ymm5 элементами фрагмента строки матрицы В
-label6:
+label6v4:
     leaq            (%rsi, %r14, 4),    %rsi    # смещение на следующую строку матрицы В
     vfmadd231ps     %ymm0, %ymm4,       %ymm6   # ymm6 += ymm0 * ymm4
     vfmadd231ps     %ymm1, %ymm4,       %ymm8   # ymm8 += ymm1 * ymm4
     vfmadd231ps     %ymm2, %ymm4,       %ymm10  # ymm10 += ymm2 * ymm4
     vfmadd231ps     %ymm3, %ymm4,       %ymm12  # ymm12 += ymm3 * ymm4
     cmpq            $1,                 %r9
-    jne label7
+    jne label7v4
     vfmadd231ps     %ymm0, %ymm5,       %ymm7   # ymm7 += ymm0 * ymm5
     vfmadd231ps     %ymm1, %ymm5,       %ymm9   # ymm9 += ymm1 * ymm5
     vfmadd231ps     %ymm2, %ymm5,       %ymm11  # ymm11 += ymm2 * ymm5
     vfmadd231ps     %ymm3, %ymm5,       %ymm13  # ymm13 += ymm3 * ymm5
-label7:
+label7v4:
     inc             %r10                        # увеличиваем значение счетчика цикла
     cmpq            %r10,               %rcx    # сравниваем счетчик цикла с кол-вом строк В
     jne label1v4                                # если они не равны, то повторяем цикл снова
     movq            %r12,               %rdx    # выгружаем из r12 адрес С
     vmovups         %ymm6,              (%rdx)  # запись ymm6 по адресу rdx
     cmpq            $1,                 %r9
-    jne label8
+    jne label8v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C 
     vmovups         %ymm7,              (%rdx)  # запись ymm6 по адресу rdx
-label8:
+label8v4:
     leaq            (%rdx, %r14, 4),    %rdx    # смещение на следующую строку матрицы C 
     vmovups         %ymm8,              (%rdx)  # запись ymm6 по адресу rdx
     cmpq            $1,                 %r9
-    jne label9
+    jne label9v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C
     vmovups         %ymm9,              (%rdx)  # запись ymm6 по адресу rdx
-label9:
+label9v4:
     leaq            (%rdx, %r14, 4),    %rdx    # смещение на следующую строку матрицы C 
     vmovups         %ymm10,             (%rdx)  # запись ymm6 по адресу rdx
     cmpq            $1,                 %r9
-    jne label10
+    jne label10v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C
     vmovups         %ymm11,             (%rdx)  # запись ymm6 по адресу rdx
-label10:
+label10v4:
     leaq            (%rdx, %r14, 4),    %rdx    # смещение на следующую строку матрицы C 
     vmovups         %ymm12,             (%rdx)  # запись ymm6 по адресу rdx
     cmpq            $1,                 %r9
-    jne label11
+    jne label11v4
     leaq            32(%rdx),           %rdx    # смещение на следующую часть строки матрицы C
     vmovups         %ymm13,             (%rdx)  # запись ymm6 по адресу rdx
-label11:
+label11v4:
     ret                                         # конец функции
 
 

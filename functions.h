@@ -10,6 +10,15 @@
 
 #define i7_4790K_Hz 4e9
 #define i7_4790K_Hz_Boost 4.4e9
+#define i5_9600KF_Hz 3.7e9
+
+struct Processor {
+    u_int64_t clock;
+    u_int64_t clockBoost;
+    u_int64_t sizeCacheL1;
+    u_int64_t sizeCacheL2;
+    u_int64_t sizeCacheL3;
+};
 
 enum FuncsMatrMul {
     FuncMatrixMul,
@@ -22,7 +31,9 @@ enum FuncsMatrMul {
     FuncAsmMatrixMulV3,
     FuncAsmMatrixMulV3N,
     FuncAsmMatrixMulV4,
-    FuncAsmMatrixMulV4N
+    FuncAsmMatrixMulV4N,
+    FuncAsmMatrixMulV5,
+    FuncAsmMatrixMulV5N
 };
 
 timespec diff(timespec start, timespec end);
@@ -60,6 +71,8 @@ float AvgDiff(float *C, float *C2, int size);
 float RelMaxDiff(float *C, float *C2, int size);
 
 float RelAvgDiff(float *C, float *C2, int size);
+
+int PrintDiff(float *C, float *C2, int size, int len);
 
 int is_cmp(const char* s1, const char* s2);
 

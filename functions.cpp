@@ -1,8 +1,38 @@
 #include "functions.h"
 #include <stdlib.h>
 #include <math.h>
+#include <ctime>
 
 #include "asmfunctions.h"
+
+int AsmMatrixMulV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK) {
+    int i = 0,
+        j = 0,
+        k = 0;
+    float *fragA = 0,
+        *fragB = 0,
+        *fragC = 0;
+    timespec start, end;
+    for (i = 0; i < sizeM / 8; i++) {
+        fragA = A + 8 * i * sizeN;
+        for (j = 0; j < sizeK / 8; j++) {
+            fragB = B + 8 * j;
+            fragC = C + 8 * i * sizeK + 8 * j;
+            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            // for (int k = 0; k < 1e9; k++)
+            AsmPartSumV5(fragA, fragB, fragC, sizeN, sizeK);
+            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            // timespec timeC = diff(start, end);
+            // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
+            // printf("%f sec\n", time_in_seconds);
+            // u_int64_t tacts = time_in_seconds * i5_9600KF_Hz,
+            //     tacts_theoretical = sizeN;
+            // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+            // printf("%f\n", performance * 100);
+        }
+    }
+    return 0;
+}
 
 int AsmMatrixMulV4(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK) {
     int i = 0,
@@ -26,8 +56,8 @@ int AsmMatrixMulV4(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK
             // timespec timeC = diff(start, end);
             // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
             // printf("%f sec\n", time_in_seconds);
-            // unsigned long long int tacts = time_in_seconds * i7_4790K_Hz,
-            //    tacts_theoretical = sizeN;
+            // u_int64_t tacts = time_in_seconds * i5_9600KF_Hz,
+            //     tacts_theoretical = sizeN;
             // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%f\n", performance * 100);
         }
@@ -48,16 +78,20 @@ int AsmMatrixMulV3(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK
         for (j = 0; j < sizeK / 16; j++) {
             fragB = B + 16 * j;
             fragC = C + 4 * i * sizeK + 16 * j;
-            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            // for (int k = 0; k < 1e9; k++)
+            //clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            // unsigned int start = clock();
+            // for (int k = 0; k < 1e6; k++)
             AsmPartSumV3(fragA, fragB, fragC, sizeN, sizeK);
-            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
-            // timespec timeC = diff(start, end);
-            // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
+            // unsigned int end = clock();
+            // unsigned int search_time = end - start;
+            // //clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            // //timespec timeC = diff(start, end);
+            // double time_in_seconds = 1.0 * search_time / CLOCKS_PER_SEC;//(timeC.tv_sec + timeC.tv_nsec / 1.0e9);// / 1.0e9;
             // printf("%f sec\n", time_in_seconds);
-            // unsigned long long int tacts = time_in_seconds * i7_4790K_Hz,
-            //    tacts_theoretical = sizeN;
-            // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+            // u_int64_t tacts = time_in_seconds * i5_9600KF_Hz,
+            //     tacts_theoretical = sizeN * 4 * 1e6;
+            // //printf("%d %d\n", tacts, tacts_theoretical);
+            // double performance = static_cast<double>(tacts_theoretical) / static_cast<double>(tacts);
             // printf("%f\n", performance * 100);
         }
     }
@@ -84,8 +118,8 @@ int AsmMatrixMulV2(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK
             // timespec timeC = diff(start, end);
             // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
             // printf("%f sec\n", time_in_seconds);
-            // unsigned long long int tacts = time_in_seconds * i7_4790K_Hz,
-            //    tacts_theoretical = sizeN;
+            // u_int64_t tacts = time_in_seconds * i5_9600KF_Hz,
+            //     tacts_theoretical = sizeN;
             // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%f\n", performance * 100);
         }
@@ -113,8 +147,8 @@ int AsmMatrixMul(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK) 
             // timespec timeC = diff(start, end);
             // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
             // printf("%f sec\n", time_in_seconds);
-            // unsigned long long int tacts = time_in_seconds * i7_4790K_Hz,
-            //    tacts_theoretical = sizeN;
+            // u_int64_t tacts = time_in_seconds * i5_9600KF_Hz,
+            //     tacts_theoretical = sizeN;
             // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%f\n", performance * 100);
         }
@@ -125,9 +159,22 @@ int AsmMatrixMul(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK) 
 int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, int sizeK, int N) {
     timespec start, end, timeC;
     double time_in_seconds = 0.0;
-    unsigned long long int tacts = 0,
+    u_int64_t tacts = 0,
         tacts_theoretical = 0;
     float performance = 0.0;
+    Processor i7_4790K;
+    i7_4790K.clock = 4e9;
+    i7_4790K.clockBoost = 4.4e9;
+    i7_4790K.sizeCacheL1 = 1.024e6;
+    i7_4790K.sizeCacheL2 = 8e6;
+    i7_4790K.sizeCacheL3 = 6.4e7;
+    Processor i5_9600KF;
+    i5_9600KF.clock = 3.7e9;
+    i5_9600KF.clockBoost = 4.6e9;
+    i5_9600KF.sizeCacheL1 = 1.536e6;
+    i5_9600KF.sizeCacheL2 = 1.2e7;
+    i5_9600KF.sizeCacheL3 = 7.2e7;
+    Processor curProcessor = i5_9600KF;
     switch (func) {
         case (FuncMatrixMul):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
@@ -157,7 +204,7 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz_Boost;
+            tacts = time_in_seconds * curProcessor.clock;
             tacts_theoretical = sizeM * sizeN * sizeK / 8;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);
@@ -179,8 +226,8 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz_Boost;
-            tacts_theoretical = sizeM * sizeN * sizeK / 8;
+            tacts = time_in_seconds * curProcessor.clock;
+            tacts_theoretical = sizeM * sizeN * sizeK / 16;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);
             // printf("%d tacts theoretical\n", tacts_theoretical);
@@ -201,8 +248,8 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz_Boost;
-            tacts_theoretical = sizeM * sizeN * sizeK / 8;
+            tacts = time_in_seconds * curProcessor.clock;
+            tacts_theoretical = sizeM * sizeN * sizeK / 16;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);
             // printf("%d tacts theoretical\n", tacts_theoretical);
@@ -223,8 +270,30 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
-            tacts = time_in_seconds * i7_4790K_Hz_Boost;
+            tacts = time_in_seconds * curProcessor.clock;
             tacts_theoretical = sizeM * sizeN * sizeK / 8;
+            performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+            // printf("%d tacts\n", tacts);
+            // printf("%d tacts theoretical\n", tacts_theoretical);
+            // printf("%f %% performance\n\n", performance * 100);
+            printf("%f\n", performance * 100);
+            //MatrixPrint(C, sizeM * sizeK, sizeK);
+            break;
+        case (FuncAsmMatrixMulV5):
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            AsmMatrixMulV5(A, B, C, sizeM, sizeN, sizeK);
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            break;
+        case (FuncAsmMatrixMulV5N):
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            for (int i = 0; i < N; i++)
+                AsmMatrixMulV5(A, B, C, sizeM, sizeN, sizeK);
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            timeC = diff(start, end);
+            time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
+            //printf("%f sec\n", time_in_seconds);
+            tacts = time_in_seconds * curProcessor.clock;
+            tacts_theoretical = sizeM * sizeN * sizeK / 16;
             performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
             // printf("%d tacts\n", tacts);
             // printf("%d tacts theoretical\n", tacts_theoretical);
@@ -394,6 +463,14 @@ float RelAvgDiff(float *C, float *C2, int size) {
     for (i = 0; i < size; i++) 
         sumDiff += abs(C[i] - C2[i]) / C[i];
     return sumDiff / size;
+}
+
+int PrintDiff(float *C, float *C2, int size, int len) {
+    printf("\u0394 max = %f\n", MaxDiff(C, C2, size, len));
+    printf("\u0394 avg = %f\n", AvgDiff(C, C2, size));
+    printf("\u03B4 max = %f\n", RelMaxDiff(C, C2, size));
+    printf("\u03B4 avg = %f\n", RelAvgDiff(C, C2, size));
+    return 0;
 }
 
 int is_cmp(const char* s1, const char* s2) {
