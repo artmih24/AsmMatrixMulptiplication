@@ -40,25 +40,11 @@ enum FuncsMatrMul {
 
 timespec diff(timespec start, timespec end);
 
-int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, int sizeK, int N = 1);
-
 int MatrixMul(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 int MatrixMul1(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 int MatrixMulTest(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
-
-int AsmMatrixMul(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
-
-int AsmMatrixMulV2(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
-
-int AsmMatrixMulV3(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
-
-int AsmMatrixMulV4(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
-
-int AsmMatrixMulV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
-
-int AsmMatrixMulBlockV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 int MatrixInitBy0(float *M, int sizeM);
 

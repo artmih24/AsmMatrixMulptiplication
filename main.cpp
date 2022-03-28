@@ -1,6 +1,7 @@
 #include <malloc.h>
 #include <string.h>
 #include "functions.h"
+#include "MatrixMulSwitch.h"
 
 int main(int argc, char* argv[]) {
     int sizeM = 0, // Q
