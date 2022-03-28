@@ -14,27 +14,23 @@ int AsmMatrixMulBlockV5(float *A, float *B, float *C, int sizeM, int sizeN, int 
         blockSizeM = (sizeM < 16) ? sizeM : 16,
         blockSizeK = (sizeK < 16) ? sizeK : 16,
         offsetM = 0,
-        offsetK = 0,
-        offsetI = 0,
-        offsetJ = 0;      
+        offsetK = 0;      
     float *fragA = 0,
         *fragB = 0,
         *fragC = 0;
     timespec start, end, timeC;
     for (m = 0; m < sizeM / blockSizeM; m++) {
-        offsetM = m * blockSizeM * sizeK;
+        offsetM = m * blockSizeM;
         for (k = 0; k < sizeK / blockSizeK; k++) {
             offsetK = k * blockSizeK;
             for (i = 0; i < blockSizeM / 8; i++) {
-                offsetI = 8 * i * sizeM / blockSizeM;
-                fragA = A + offsetI + offsetM;
+                fragA = A + (8 * i * sizeN) + offsetM * sizeN;
                 for (j = 0; j < blockSizeK / 8; j++) {
-                    offsetJ = 8 * j;
-                    fragB = B + offsetJ + offsetK;
-                    fragC = C + offsetI + offsetJ + offsetK + offsetM;
+                    fragB = B + (8 * j) + offsetK;
+                    fragC = C + (8 * i * sizeK) + (8 * j) + offsetK + (offsetM * sizeK);
                     // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
                     // for (int k = 0; k < 1e9; k++)
-                    AsmPartSumV5(fragA, fragB, fragC, sizeN, blockSizeK);
+                    AsmPartSumV5(fragA, fragB, fragC, sizeN, sizeK);
                     // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
                     // timeC = diff(start, end);
                     // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
