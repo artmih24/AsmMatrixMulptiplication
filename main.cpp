@@ -75,11 +75,11 @@ int main(int argc, char* argv[]) {
         MatrixReadFromFile(B, sizeB, file);
         fclose(file);
     }
-    MatrixPrintV2(A, sizeA, sizeN);
-    ////MatrixPrint(B, sizeB, sizeK);
+    //MatrixPrintV2(A, sizeA, sizeN);
+    ////MatrixPrintV2(B, sizeB, sizeK);
 
-    MatrixTranspose(A, At, sizeM, sizeN);
-    MatrixPrintV2(At, sizeA, sizeM);
+    //MatrixTranspose(A, At, sizeM, sizeN);
+    //MatrixPrintV2(At, sizeA, sizeM);
 
     MatrixMulTime(FuncMatrixMul1, A, B, C, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncMatrixMul, A, B, C2, sizeM, sizeN, sizeK);
@@ -88,8 +88,8 @@ int main(int argc, char* argv[]) {
     ////MatrixMulTime(FuncAsmMatrixMulV2, A, B, C5, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV3, A, B, C6, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV4, A, B, C7, sizeM, sizeN, sizeK);
-    ////MatrixMulTime(FuncAsmMatrixMulV5, A, B, C8, sizeM, sizeN, sizeK);
-    ////MatrixMulTime(FuncAsmMatrixMulBlockV5, A, B, C8, sizeM, sizeN, sizeK);
+    //MatrixMulTime(FuncAsmMatrixMulV6, A, B, C8, sizeM, sizeN, sizeK);
+    MatrixMulTime(FuncAsmMatrixMulBlockV6, A, B, C8, sizeM, sizeN, sizeK);
 
     ////MatrixMulTime(FuncAsmMatrixMulN, A, B, C4, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulV2N, A, B, C5, sizeM, sizeN, sizeK, 9);
@@ -97,14 +97,14 @@ int main(int argc, char* argv[]) {
     ////MatrixMulTime(FuncAsmMatrixMulV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulBlockV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
 
-    //MatrixPrint(C, sizeC, sizeK);
+    MatrixPrintV2(C, sizeC, sizeK);
     //// MatrixPrint(C4, sizeC, sizeK);
     //// MatrixPrint(C5, sizeC, sizeK);
     //// MatrixPrint(C6, sizeC, sizeK);
     //// MatrixPrint(C7, sizeC, sizeK);
-    //MatrixPrint(C8, sizeC, sizeK);
+    MatrixPrintV2(C8, sizeC, sizeK);
 
-    //PrintDiff(C, C8, sizeM * sizeK, sizeK);
+    PrintDiff(C, C8, sizeM * sizeK, sizeK);
 
     delete[] A, B, C, C2, C3, C4, C5, C6, C7, C8, C9;
     return 0;

@@ -16,4 +16,7 @@ extern "C" float* AsmPartSumV4(float *fragA, float *fragB, float *fragC, int siz
 // 8x8
 extern "C" float* AsmPartSumV5(float *fragA, float *fragB, float *fragC, int sizeN, int sizeK);
 
+// 8x8
+extern "C" float* AsmPartSumV6(float *fragA, float *fragB, float *fragC, int sizeN, int sizeK, int sizeM);
+
 #endif
