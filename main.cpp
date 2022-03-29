@@ -39,7 +39,9 @@ int main(int argc, char* argv[]) {
         *C5 = new float[sizeC],
         *C6 = new float[sizeC],
         *C7 = new float[sizeC],
-        *C8 = new float[sizeC];
+        *C8 = new float[sizeC],
+        *C9 = new float[sizeC],
+        *At = new float[sizeA];
     MatrixInitBy0(A, sizeA);
     MatrixInitBy0(B, sizeB);
     MatrixInitBy0(C, sizeC);
@@ -50,6 +52,8 @@ int main(int argc, char* argv[]) {
     MatrixInitBy0(C6, sizeC);
     MatrixInitBy0(C7, sizeC);
     MatrixInitBy0(C8, sizeC);
+    MatrixInitBy0(C9, sizeC);
+    MatrixInitBy0(At, sizeA);
     if (argc == 5) {
         char argRandom[] = "--random",
             argIncrement[] = "--increment";
@@ -71,8 +75,12 @@ int main(int argc, char* argv[]) {
         MatrixReadFromFile(B, sizeB, file);
         fclose(file);
     }
-    ////MatrixPrint(A, sizeA, sizeN);
+    MatrixPrintV2(A, sizeA, sizeN);
     ////MatrixPrint(B, sizeB, sizeK);
+
+    MatrixTranspose(A, At, sizeM, sizeN);
+    MatrixPrintV2(At, sizeA, sizeM);
+
     MatrixMulTime(FuncMatrixMul1, A, B, C, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncMatrixMul, A, B, C2, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncMatrixMulTest, A, B, C3, sizeM, sizeN, sizeK);
@@ -80,14 +88,14 @@ int main(int argc, char* argv[]) {
     ////MatrixMulTime(FuncAsmMatrixMulV2, A, B, C5, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV3, A, B, C6, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV4, A, B, C7, sizeM, sizeN, sizeK);
-    MatrixMulTime(FuncAsmMatrixMulV5, A, B, C8, sizeM, sizeN, sizeK);
-    //MatrixMulTime(FuncAsmMatrixMulBlockV5, A, B, C8, sizeM, sizeN, sizeK);
+    ////MatrixMulTime(FuncAsmMatrixMulV5, A, B, C8, sizeM, sizeN, sizeK);
+    ////MatrixMulTime(FuncAsmMatrixMulBlockV5, A, B, C8, sizeM, sizeN, sizeK);
 
     ////MatrixMulTime(FuncAsmMatrixMulN, A, B, C4, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulV2N, A, B, C5, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulV3N, A, B, C6, sizeM, sizeN, sizeK, 9);
-    //MatrixMulTime(FuncAsmMatrixMulV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
-    //MatrixMulTime(FuncAsmMatrixMulBlockV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
+    ////MatrixMulTime(FuncAsmMatrixMulV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
+    ////MatrixMulTime(FuncAsmMatrixMulBlockV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
 
     //MatrixPrint(C, sizeC, sizeK);
     //// MatrixPrint(C4, sizeC, sizeK);
@@ -98,6 +106,6 @@ int main(int argc, char* argv[]) {
 
     //PrintDiff(C, C8, sizeM * sizeK, sizeK);
 
-    delete[] A, B, C, C2, C3, C4, C5, C6, C7, C8;
+    delete[] A, B, C, C2, C3, C4, C5, C6, C7, C8, C9;
     return 0;
 }

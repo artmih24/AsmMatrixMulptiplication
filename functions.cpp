@@ -22,6 +22,17 @@ timespec diff(timespec start, timespec end) {
     return temp;
 }
 
+int MatrixTranspose(float *M, float *Mt, int lines, int cols) {
+    int i = 0,
+        j = 0;
+    for (i = 0; i < lines; i++) {
+        for (j = 0; j < cols; j++) {
+            Mt[j * lines + i] = M[i * cols + j];
+        }
+    }
+    return 0;
+}
+
 int MatrixMul(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK) {
     int i = 0,
         j = 0,
@@ -107,6 +118,33 @@ int MatrixReadFromFile(float *M, int sizeM, FILE *file) {
 int MatrixPrint(float *M, int sizeM, int sizeL) {
     int i = 0;
     for (i = 0; i < sizeM; i++) {
+        printf("%.3f ", M[i]);
+        //printf("%.4f\t", M[i]);
+        if (i % sizeL == sizeL - 1)
+            printf("\n");
+        if (i == sizeM - 1)
+            printf("\n");
+    }
+    return 0;
+}
+
+int MatrixPrintV2(float *M, int sizeM, int sizeL) {
+    int i = 0,
+        j = 0,
+        maxWidth = 0, // минимальная возможная
+        div = 1;
+    int *w = new int[sizeM];
+    float curM = 0.0;
+    for (i = 0; i < sizeM; i++) {
+        curM = M[i];
+        while (floor(curM /= 10) != 0)
+            w[i]++;
+        if (w[i] > maxWidth)
+            maxWidth = w[i];
+    }
+    for (i = 0; i < sizeM; i++) {
+        for (j = 0; j < maxWidth - w[i]; j++)
+            printf(" ");
         printf("%.3f ", M[i]);
         //printf("%.4f\t", M[i]);
         if (i % sizeL == sizeL - 1)

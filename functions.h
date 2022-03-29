@@ -40,6 +40,8 @@ enum FuncsMatrMul {
 
 timespec diff(timespec start, timespec end);
 
+int MatrixTranspose(float *M, float *Mt, int lines, int cols);
+
 int MatrixMul(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 int MatrixMul1(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
@@ -55,6 +57,8 @@ int MatrixInitByRnd(float *M, int sizeM);
 int MatrixReadFromFile(float *M, int sizeM, FILE *file);
 
 int MatrixPrint(float *M, int sizeM, int sizeL);
+
+int MatrixPrintV2(float *M, int sizeM, int sizeL);
 
 float MaxDiff(float *C, float *C2, int size, int len);
 
