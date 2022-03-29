@@ -137,8 +137,7 @@ int MatrixPrintV2(float *M, int sizeM, int sizeL) {
     for (i = 0; i < sizeM; i++) {
         curM = M[i];
         while (floor(curM /= 10) != 0)
-            w[i]++;
-        maxWidth = (w[i] > maxWidth) ? w[i] : maxWidth;
+            maxWidth = (++w[i] > maxWidth) ? w[i] : maxWidth;
     }
     for (i = 0; i < sizeM; i++) {
         while (maxWidth - w[i]++ != 0)
