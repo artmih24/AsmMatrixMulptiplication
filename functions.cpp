@@ -130,7 +130,6 @@ int MatrixPrint(float *M, int sizeM, int sizeL) {
 
 int MatrixPrintV2(float *M, int sizeM, int sizeL) {
     int i = 0,
-        j = 0,
         maxWidth = 0, // минимальная возможная
         div = 1;
     int *w = new int[sizeM];
@@ -139,11 +138,10 @@ int MatrixPrintV2(float *M, int sizeM, int sizeL) {
         curM = M[i];
         while (floor(curM /= 10) != 0)
             w[i]++;
-        if (w[i] > maxWidth)
-            maxWidth = w[i];
+        maxWidth = (w[i] > maxWidth) ? w[i] : maxWidth;
     }
     for (i = 0; i < sizeM; i++) {
-        for (j = 0; j < maxWidth - w[i]; j++)
+        while (maxWidth - w[i]++ != 0)
             printf(" ");
         printf("%.3f ", M[i]);
         //printf("%.4f\t", M[i]);
