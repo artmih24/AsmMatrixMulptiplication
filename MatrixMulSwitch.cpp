@@ -22,32 +22,32 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
     i5_9600KF.sizeCacheL3 = 9e6;
     Processor curProcessor = i7_4790K;
     float *At = new float[sizeM * sizeN];
-    MatrixTranspose(A, At, sizeM, sizeN);
+    MatrixTranspose(in A, out At, sizeM, sizeN);
     switch (func) {
         case (FuncMatrixMul):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            MatrixMul(A, B, C, sizeM, sizeN, sizeK);
+            MatrixMul(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncMatrixMul1):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            MatrixMul1(A, B, C, sizeM, sizeN, sizeK);
+            MatrixMul1(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncMatrixMulTest):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            MatrixMulTest(A, B, C, sizeM, sizeN, sizeK);
+            MatrixMulTest(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMul):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMul(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMul(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulN):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMul(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMul(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -63,13 +63,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulV2):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulV2(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulV2(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulV2N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulV2(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulV2(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -85,13 +85,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulV3):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulV3(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulV3(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulV3N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulV3(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulV3(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -107,13 +107,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulV4):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulV4(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulV4(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulV4N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulV4(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulV4(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -129,13 +129,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulV5):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulV5(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulV5(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulV5N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulV5(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulV5(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -151,13 +151,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulBlockV5):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulBlockV5(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulBlockV5(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulBlockV5N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulBlockV5(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulBlockV5(in A, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -173,13 +173,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulV6):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulV6(At, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulV6(in At, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulV6N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulV6(At, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulV6(in At, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -195,13 +195,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulBlockV6):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulBlockV6(At, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulBlockV6(in At, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulBlockV6N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulBlockV6(At, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulBlockV6(in At, in B, out C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);

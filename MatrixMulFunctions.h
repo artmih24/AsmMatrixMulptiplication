@@ -13,8 +13,8 @@ int AsmMatrixMulV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK
 
 int AsmMatrixMulBlockV5(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
-int AsmMatrixMulV6(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
+int AsmMatrixMulV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
-int AsmMatrixMulBlockV6(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK);
+int AsmMatrixMulBlockV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
 #endif
