@@ -64,6 +64,8 @@ int MatrixPrint(float *M, int sizeM, int sizeL);
 
 int MatrixPrintV2(float *M, int sizeM, int sizeL);
 
+int MatrixPrintV3(float *M, int sizeM, int sizeL);
+
 float MaxDiff(float *C, float *C2, int size, int len);
 
 float AvgDiff(float *C, float *C2, int size);

@@ -101,14 +101,14 @@ int main(int argc, char* argv[]) {
     //MatrixMulTime(FuncAsmMatrixMulV6N, A, B, C8, sizeM, sizeN, sizeK, 9);
     MatrixMulTime(FuncAsmMatrixMulBlockV6, A, B, C8, sizeM, sizeN, sizeK, 1);
 
-    MatrixPrintV2(C, sizeC, sizeK);
+    //MatrixPrintV2(C, sizeC, sizeK);
     //// MatrixPrint(C4, sizeC, sizeK);
     //// MatrixPrint(C5, sizeC, sizeK);
     //// MatrixPrint(C6, sizeC, sizeK);
     //// MatrixPrint(C7, sizeC, sizeK);
-    MatrixPrintV2(C8, sizeC, sizeK);
+    //MatrixPrintV2(C8, sizeC, sizeK);
 
-    PrintDiff(C, C8, sizeM * sizeK, sizeK);
+    //PrintDiff(C, C8, sizeM * sizeK, sizeK);
 
     delete[] A, B, C, C2, C3, C4, C5, C6, C7, C8, C9;
     return 0;
