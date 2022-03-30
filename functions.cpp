@@ -101,7 +101,7 @@ int MatrixInitBy0(float *M, int sizeM) {
 int MatrixInitByRnd(float *M, int sizeM) {
     int i = 0;
     for (i = 0; i < sizeM; i++)
-        M[i] = (float)(rand() % (20 * 256));// / 256.0;
+        M[i] = (float)(rand() % (20 * 256)) / 256.0;
     return 0;
 }
 
@@ -118,10 +118,9 @@ int MatrixReadFromFile(float *M, int sizeM, FILE *file) {
 int MatrixPrint(float *M, int sizeM, int sizeL) {
     int i = 0;
     for (i = 0; i < sizeM; i++) {
-        printf("%.3f ", M[i]);
+        printf("%.3f", M[i]);
         //printf("%.4f\t", M[i]);
-        if (i % sizeL == sizeL - 1)
-            printf("\n");
+        printf((i % sizeL == sizeL - 1) ? "\n" : " ");
         if (i == sizeM - 1)
             printf("\n");
     }
@@ -142,10 +141,9 @@ int MatrixPrintV2(float *M, int sizeM, int sizeL) {
     for (i = 0; i < sizeM; i++) {
         while (maxWidth - w[i]++ != 0)
             printf(" ");
-        printf("%.3f ", M[i]);
+        printf("%.3f", M[i]);
         //printf("%.4f\t", M[i]);
-        if (i % sizeL == sizeL - 1)
-            printf("\n");
+        printf((i % sizeL == sizeL - 1) ? "\n" : " ");
         if (i == sizeM - 1)
             printf("\n");
     }
@@ -161,8 +159,7 @@ float MaxDiff(float *C, float *C2, int size, int len) {
         //if (diff > 0)
             //printf("|%f - %f|[%d, %d] = %f\n", C[i], C2[i], i % len, (int) i / len, diff);
             ////printf("|%f - %f| = %f\n", C[i], C2[i], diff);
-        if (diff > maxDiff)
-            maxDiff = diff;
+        maxDiff = (diff > maxDiff) ? diff : maxDiff;
     }
     return maxDiff;
 }
@@ -183,8 +180,7 @@ float RelMaxDiff(float *C, float *C2, int size) {
         diff = abs(C[i] - C2[i]) / C[i];
         // if (diff > 0)
         //     printf("|%f - %f| = %f\n", C[i], C2[i], diff);
-        if (diff > maxDiff)
-            maxDiff = diff;
+        maxDiff = (diff > maxDiff) ? diff : maxDiff;
     }
     return maxDiff;
 }

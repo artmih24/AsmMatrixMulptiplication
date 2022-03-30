@@ -17,9 +17,9 @@ int AsmMatrixMulBlockV6(float *A, float *B, float *C, int sizeM, int sizeN, int 
         offsetK = 0;      
     float *fragA = 0,
         *fragB = 0,
-        *fragC = 0,
-        *At = new float[sizeM * sizeN];
-    MatrixTranspose(A, At, sizeM, sizeN);
+        *fragC = 0;//,
+        //*At = new float[sizeM * sizeN];
+    //MatrixTranspose(A, At, sizeM, sizeN);
     timespec start, end, timeC;
     for (m = 0; m < sizeM / blockSizeM; m++) {
         offsetM = m * blockSizeM;
@@ -31,14 +31,14 @@ int AsmMatrixMulBlockV6(float *A, float *B, float *C, int sizeM, int sizeN, int 
                     fragB = B + (8 * j) + offsetK;
                     fragC = C + (8 * i * sizeK) + (8 * j) + offsetK + (offsetM * sizeK);
                     // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-                    // for (int k = 0; k < 1e9; k++)
+                    // for (int k = 0; k < 1e6; k++)
                     AsmPartSumV6(fragA, fragB, fragC, sizeN, sizeK, sizeM);
                     // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
                     // timeC = diff(start, end);
-                    // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e9;
-                    // printf("%f sec\n", time_in_seconds);
-                    // u_int64_t tacts = time_in_seconds * i5_9600KF_Hz,
-                    //     tacts_theoretical = sizeN;
+                    // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e6;
+                    // ////printf("%f sec\n", time_in_seconds);
+                    // u_int64_t tacts = time_in_seconds * i7_4790K_Hz,
+                    //     tacts_theoretical = sizeN * 4;
                     // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
                     // printf("%f\n", performance * 100);
                 }
@@ -54,21 +54,21 @@ int AsmMatrixMulV6(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK
         k = 0;
     float *fragA = 0,
         *fragB = 0,
-        *fragC = 0,
-        *At = new float[sizeM * sizeN];
-    MatrixTranspose(A, At, sizeM, sizeN);
+        *fragC = 0;//,
+        //*At = new float[sizeM * sizeN];
+    //MatrixTranspose(A, At, sizeM, sizeN);
     timespec start, end;
     for (i = 0; i < sizeM / 8; i++) {
-        fragA = At + 8 * i;
+        fragA = A + 8 * i;
         for (j = 0; j < sizeK / 8; j++) {
             fragB = B + 8 * j;
             fragC = C + 8 * i * sizeK + 8 * j;
             // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            // for (int k = 0; k < 1e4; k++)
-                AsmPartSumV6(fragA, fragB, fragC, sizeN, sizeK, sizeM);
+            //for (int k = 0; k < 1e6; k++)
+            AsmPartSumV6(fragA, fragB, fragC, sizeN, sizeK, sizeM);
             // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             // timespec timeC = diff(start, end);
-            // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e4;
+            // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e6;
             // ////printf("%f sec\n", time_in_seconds);
             // u_int64_t tacts = time_in_seconds * i7_4790K_Hz,
             //     tacts_theoretical = sizeN * 4;

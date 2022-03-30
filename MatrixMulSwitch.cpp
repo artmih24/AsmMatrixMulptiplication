@@ -21,6 +21,8 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
     i5_9600KF.sizeCacheL2 = 1.5e6;
     i5_9600KF.sizeCacheL3 = 9e6;
     Processor curProcessor = i7_4790K;
+    float *At = new float[sizeM * sizeN];
+    MatrixTranspose(A, At, sizeM, sizeN);
     switch (func) {
         case (FuncMatrixMul):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
@@ -171,13 +173,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulV6):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulV6(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulV6(At, B, C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulV6N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulV6(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulV6(At, B, C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
@@ -193,13 +195,13 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             break;
         case (FuncAsmMatrixMulBlockV6):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulBlockV6(A, B, C, sizeM, sizeN, sizeK);
+            AsmMatrixMulBlockV6(At, B, C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulBlockV6N):
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulBlockV6(A, B, C, sizeM, sizeN, sizeK);
+                AsmMatrixMulBlockV6(At, B, C, sizeM, sizeN, sizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);

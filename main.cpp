@@ -56,13 +56,15 @@ int main(int argc, char* argv[]) {
     MatrixInitBy0(At, sizeA);
     if (argc == 5) {
         char argRandom[] = "--random",
-            argIncrement[] = "--increment";
-        if (compare(argv[1], argRandom)) {
+            argR[] = "--R",
+            argIncrement[] = "--increment",
+            argI[] = "--I";
+        if (compare(argv[1], argRandom) || compare(argv[1], argR)) {
             srand(time(0)); 
             MatrixInitByRnd(A, sizeA);
             MatrixInitByRnd(B, sizeB);
         }
-        else if (compare(argv[1], argIncrement)) {
+        else if (compare(argv[1], argIncrement) || compare(argv[1], argI)) {
             MatrixInitByIncrement(A, sizeM, sizeN);
             MatrixInitByIncrement(B, sizeN, sizeK, 5);
         }
@@ -81,21 +83,23 @@ int main(int argc, char* argv[]) {
     //MatrixTranspose(A, At, sizeM, sizeN);
     //MatrixPrintV2(At, sizeA, sizeM);
 
-    MatrixMulTime(FuncMatrixMul1, A, B, C, sizeM, sizeN, sizeK);
+    MatrixMulTime(FuncMatrixMul1, A, B, C, sizeM, sizeN, sizeK, 1);
     ////MatrixMulTime(FuncMatrixMul, A, B, C2, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncMatrixMulTest, A, B, C3, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMul, A, B, C4, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV2, A, B, C5, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV3, A, B, C6, sizeM, sizeN, sizeK);
     ////MatrixMulTime(FuncAsmMatrixMulV4, A, B, C7, sizeM, sizeN, sizeK);
-    //MatrixMulTime(FuncAsmMatrixMulV6, A, B, C8, sizeM, sizeN, sizeK);
-    MatrixMulTime(FuncAsmMatrixMulBlockV6, A, B, C8, sizeM, sizeN, sizeK);
+    //MatrixMulTime(FuncAsmMatrixMulV6, A, B, C8, sizeM, sizeN, sizeK, 1);
+    //MatrixMulTime(FuncAsmMatrixMulBlockV6, A, B, C8, sizeM, sizeN, sizeK);
 
     ////MatrixMulTime(FuncAsmMatrixMulN, A, B, C4, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulV2N, A, B, C5, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulV3N, A, B, C6, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
     ////MatrixMulTime(FuncAsmMatrixMulBlockV5N, A, B, C8, sizeM, sizeN, sizeK, 9);
+    //MatrixMulTime(FuncAsmMatrixMulV6N, A, B, C8, sizeM, sizeN, sizeK, 9);
+    MatrixMulTime(FuncAsmMatrixMulBlockV6, A, B, C8, sizeM, sizeN, sizeK, 1);
 
     MatrixPrintV2(C, sizeC, sizeK);
     //// MatrixPrint(C4, sizeC, sizeK);
