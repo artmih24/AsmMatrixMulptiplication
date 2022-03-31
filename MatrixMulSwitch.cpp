@@ -221,5 +221,6 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
     }
+    delete[] At;
     return 0;
 }

@@ -1,5 +1,6 @@
 #set multiplot layout 2,2 rowsfirst
-set xtics 0,512,16384
+set xtics 0,256,8192
+set ytics 0,5,100
 plot "./MatrMulV6/results3_M_v6_16384_block.csv" with lines lt rgb "red", \
      "./MatrMulV6/results3_N_v6_16384_block.csv" with lines lt rgb "#009900", \
      "./MatrMulV6/results3_K_v6_16384_block.csv" with lines lt rgb "blue" #smooth csplines

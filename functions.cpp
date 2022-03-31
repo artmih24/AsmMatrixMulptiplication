@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctime>
+#include <iostream>
 
 #include "asmfunctions.h"
 #include "MatrixMulFunctions.h"
@@ -98,6 +99,13 @@ int MatrixInitBy0(float *M, int sizeM) {
     return 0;
 }
 
+int MatrixInitBy0(int *M, int sizeM) {
+    int i = 0;
+    for (i = 0; i < sizeM; i++)
+        M[i] = 0;
+    return 0;
+}
+
 int MatrixInitByRnd(float *M, int sizeM) {
     int i = 0;
     for (i = 0; i < sizeM; i++)
@@ -131,11 +139,13 @@ int MatrixPrintV2(float *M, int sizeM, int sizeL) {
     int i = 0,
         maxWidth = 0;
     int *w = new int[sizeM];
+    MatrixInitBy0(w, sizeM);
     float curM = 0.0;
     for (i = 0; i < sizeM; i++) {
         curM = M[i];
-        while (floor(curM /= 10) != 0)
+        while (floor(curM /= 10.0) != 0) {
             maxWidth = (++w[i] > maxWidth) ? w[i] : maxWidth;
+        }
     }
     for (i = 0; i < sizeM; i++) {
         while (maxWidth - w[i]++ != 0)
@@ -146,6 +156,7 @@ int MatrixPrintV2(float *M, int sizeM, int sizeL) {
         if (i == sizeM - 1)
             printf("\n");
     }
+    delete[] w;
     return 0;
 }
 
@@ -155,6 +166,8 @@ int MatrixPrintV3(float *M, int sizeM, int sizeL) {
         ind = 0;
     int *w = new int[sizeM],
         *mw = new int[sizeL];
+    MatrixInitBy0(w, sizeM);
+    MatrixInitBy0(mw, sizeL);
     float curM = 0.0;
     for (i = 0; i < sizeL; i++)
         for (j = 0; j < sizeM / sizeL; j++) {
@@ -172,6 +185,7 @@ int MatrixPrintV3(float *M, int sizeM, int sizeL) {
         if (i == sizeM - 1)
             printf("\n");
     }
+    delete[] w, mw;
     return 0;
 }
 

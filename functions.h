@@ -54,6 +54,8 @@ int MatrixMulTest(float *A, float *B, float *C, int sizeM, int sizeN, int sizeK)
 
 int MatrixInitBy0(float *M, int sizeM);
 
+int MatrixInitBy0(int *M, int sizeM);
+
 int MatrixInitByIncrement(float *M, int rows, int cols, int start = 0, int step = 1);
 
 int MatrixInitByRnd(float *M, int sizeM);

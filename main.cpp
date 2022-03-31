@@ -69,15 +69,13 @@ int main(int argc, char* argv[]) {
     //MatrixTranspose(in A, out At, sizeM, sizeN);
     //MatrixPrintV2(At, sizeA, sizeM);
 
-    MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, 1);
-
-    //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, 1);
+    //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, 1);
     MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, 1);
 
     //MatrixPrintV2(C, sizeC, sizeK);
     //MatrixPrintV2(C2, sizeC, sizeK);
 
-    PrintDiff(C, C2, sizeM * sizeK, sizeK);
+    //PrintDiff(C, C2, sizeM * sizeK, sizeK);
 
     delete[] A, B, C, C2, At;
     return 0;
