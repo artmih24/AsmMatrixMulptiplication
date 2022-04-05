@@ -22,6 +22,16 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
     i5_9600KF.sizeCacheL3 = 9e6;
     Processor curProcessor = i7_4790K;
     float *At = new float[sizeM * sizeN];
+    int blockSize_min = 8,
+        blockSizeMmax = 128,//64,
+        //128,
+        blockSizeKmax = 16384 / blockSizeMmax,
+        //128,
+        blockSizeNmax = 262144 / (blockSizeMmax * blockSizeKmax),
+        //16, // 32,
+        blockSizeM = (sizeM < blockSizeMmax) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
+        blockSizeN = (sizeN < blockSizeNmax) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
+        blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min;
     MatrixTranspose(in A, out At, sizeM, sizeN);
     switch (func) {
         case (FuncMatrixMul):
@@ -194,14 +204,26 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             //MatrixPrint(C, sizeM * sizeK, sizeK);
             break;
         case (FuncAsmMatrixMulBlockV6):
+            // if (sizeM % blockSizeM != 0) 
+            //     exit(0); //blockSizeM -= sizeM % blockSizeM;   
+            // if (sizeN % blockSizeN != 0) 
+            //     exit(0); //blockSizeN -= sizeN % blockSizeN;  
+            // if (sizeK % blockSizeK != 0) 
+            //     exit(0); //blockSizeK -= sizeK % blockSizeK; 
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulBlockV6(in At, in B, out C, sizeM, sizeN, sizeK);
+            AsmMatrixMulBlockV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulBlockV6N):
+            // if (sizeM % blockSizeM != 0) 
+            //     exit(0); //blockSizeM -= sizeM % blockSizeM;   
+            // if (sizeN % blockSizeN != 0) 
+            //     exit(0); //blockSizeN -= sizeN % blockSizeN;  
+            // if (sizeK % blockSizeK != 0) 
+            //     exit(0); //blockSizeK -= sizeK % blockSizeK; 
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulBlockV6(in At, in B, out C, sizeM, sizeN, sizeK);
+                AsmMatrixMulBlockV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);

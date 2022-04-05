@@ -17,6 +17,6 @@ int AsmMatrixMulV6(float *At, float *B, float *C, int sizeM, int sizeN, int size
 
 int AsmMatrixMulBlockMKV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK);
 
-int AsmMatrixMulBlockV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK);
+int AsmMatrixMulBlockV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK, int blockSizeM, int blockSizeN, int blockSizeK);
 
 #endif

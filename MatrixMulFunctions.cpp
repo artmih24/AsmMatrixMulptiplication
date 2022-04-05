@@ -5,32 +5,16 @@
 #include <math.h>
 
 
-int AsmMatrixMulBlockV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK) {
+int AsmMatrixMulBlockV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK, int blockSizeM, int blockSizeN, int blockSizeK) {
     int i = 0,
         j = 0,
         k = 0,
         l = 0,
         m = 0,
         n = 0,
-        blockSize_min = 8,
-        blockSizeMmax = 64,
-        //128,
-        blockSizeKmax = 16384 / blockSizeMmax,
-        //128,
-        blockSizeNmax = 262144 / (blockSizeMmax * blockSizeKmax),
-        //16, // 32,
-        blockSizeM = (sizeM < blockSizeMmax * 8) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
-        blockSizeN = (sizeN < blockSizeNmax * 8) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
-        blockSizeK = (sizeK < blockSizeKmax * 8) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min,
         offsetM = 0,
         offsetN = 0,
-        offsetK = 0;
-    if (sizeM % blockSizeM != 0) 
-        exit(0); //blockSizeM -= sizeM % blockSizeM;   
-    if (sizeN % blockSizeN != 0) 
-        exit(0); //blockSizeN -= sizeN % blockSizeN;  
-    if (sizeK % blockSizeK != 0) 
-        exit(0); //blockSizeK -= sizeK % blockSizeK;     
+        offsetK = 0;    
     float *fragAt = 0,
         *fragB = 0,
         *fragC = 0;

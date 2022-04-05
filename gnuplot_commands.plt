@@ -15,6 +15,9 @@ if (step eq "") {
      print "default step = ", step
 }
 else {
+     if (step % 8 != 0) {
+          step = step * 2
+     }
      print "step = ", step
 }
 set xtics 0,step,end
@@ -25,7 +28,7 @@ set datafile separator ","
 # plot "results_M.csv" using 1:2 with lines lt rgb "red" title "Performance(M)", \
 #      "results_N.csv" using 1:2 with lines lt rgb "#009900" title "Performance(N)", \
 #      "results_K.csv" using 1:2 with lines lt rgb "blue" title "Performance(K)"
-plot "results.csv" using 1:2 with lines lt rgb "red" title "Performance(M)", \
-     "results.csv" using 1:3 with lines lt rgb "#009900" title "Performance(N)", \
-     "results.csv" using 1:4 with lines lt rgb "blue" title "Performance(K)"
+plot "results.csv" using 1:2 with lines lt rgb "red" title columnhead, \
+     "results.csv" using 1:3 with lines lt rgb "#009900" title columnhead, \
+     "results.csv" using 1:4 with lines lt rgb "blue" title columnhead
 pause -1
