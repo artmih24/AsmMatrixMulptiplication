@@ -17,7 +17,8 @@ int main(int argc, char* argv[]) {
         sizeM = atoi(argv[2]);
         sizeN = atoi(argv[3]);
         sizeK = atoi(argv[4]);
-    } else if (argc <= 2) {
+    } 
+    else if (argc <= 2) {
         file = fopen(argc == 1 ? "input8.txt" : argv[1], "r");
         if (!fscanf(file, "%d", &sizeM))
             printf("Can't read file\n");
@@ -26,6 +27,23 @@ int main(int argc, char* argv[]) {
         else if (!fscanf(file, "%d", &sizeK))
             printf("Can't read file\n");
     }
+    int blockSize_min = 8,
+        blockSizeMmax = 256,//128,//64,
+        //128,
+        blockSizeKmax = 16384 / blockSizeMmax,
+        //128,
+        blockSizeNmax = 262144 / (blockSizeMmax * blockSizeKmax),
+        //524288 / (blockSizeMmax * blockSizeKmax),
+        //16, // 32,
+        blockSizeM = (sizeM < blockSizeMmax) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
+        blockSizeN = (sizeN < blockSizeNmax) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
+        blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min;
+    if (sizeN % blockSizeN != 0) 
+        sizeN += sizeN - sizeN % blockSizeN;
+    if (sizeM % blockSizeM != 0) 
+        sizeM += sizeM - sizeM % blockSizeM;
+    if (sizeK % blockSizeK != 0) 
+        sizeK += sizeK - sizeK % blockSizeK;
     //printf("[%dx%d] * [%dx%d] => [%dx%d]\n\n", sizeM, sizeN, sizeN, sizeK, sizeM, sizeK);
     sizeA = sizeM * sizeN;
     sizeB = sizeN * sizeK;
@@ -70,8 +88,8 @@ int main(int argc, char* argv[]) {
     //MatrixPrintV2(At, sizeA, sizeM);
 
     //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, 1);
-    MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, 1);
-    //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, 9);
+    MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
+    //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
 
     //MatrixPrintV2(C, sizeC, sizeK);
     //MatrixPrintV2(C2, sizeC, sizeK);
