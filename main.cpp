@@ -71,6 +71,7 @@ int main(int argc, char* argv[]) {
 
     //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, 1);
     MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, 1);
+    //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, 9);
 
     //MatrixPrintV2(C, sizeC, sizeK);
     //MatrixPrintV2(C2, sizeC, sizeK);
