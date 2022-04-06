@@ -28,13 +28,9 @@ int main(int argc, char* argv[]) {
             printf("Can't read file\n");
     }
     int blockSize_min = 8,
-        blockSizeMmax = 256,//128,//64,
-        //128,
-        blockSizeKmax = 16384 / blockSizeMmax,
-        //128,
-        blockSizeNmax = 262144 / (blockSizeMmax * blockSizeKmax),
-        //524288 / (blockSizeMmax * blockSizeKmax),
-        //16, // 32,
+        blockSizeMmax = p2(7),
+        blockSizeNmax = p2(5),
+        blockSizeKmax = p2(9),
         blockSizeM = (sizeM < blockSizeMmax) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
         blockSizeN = (sizeN < blockSizeNmax) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
         blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min;
@@ -87,7 +83,7 @@ int main(int argc, char* argv[]) {
     //MatrixTranspose(in A, out At, sizeM, sizeN);
     //MatrixPrintV2(At, sizeA, sizeM);
 
-    //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, 1);
+    //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
     MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
     //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
 

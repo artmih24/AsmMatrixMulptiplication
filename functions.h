@@ -12,6 +12,8 @@
 #define i7_4790K_Hz_Boost 4.4e9
 #define i5_9600KF_Hz 3.7e9
 
+#define p2(x) 1 << x
+
 struct Processor {
     u_int64_t clock;
     u_int64_t clockBoost;
