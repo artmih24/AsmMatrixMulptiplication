@@ -233,6 +233,46 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             printf("%f\n", performance * 100);
             //MatrixPrint(C, sizeM * sizeK, sizeK);
             break;
+        case (FuncAsmMatrixMulParallelV6):
+            // if (sizeM % blockSizeM != 0) 
+            //     exit(0); //blockSizeM -= sizeM % blockSizeM;   
+            // if (sizeN % blockSizeN != 0) 
+            //     exit(0); //blockSizeN -= sizeN % blockSizeN;  
+            // if (sizeK % blockSizeK != 0) 
+            //     exit(0); //blockSizeK -= sizeK % blockSizeK; 
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK);
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            break;
+        case (FuncAsmMatrixMulParallelV6N):
+            // if (sizeM % blockSizeM != 0) 
+            //     exit(0); //blockSizeM -= sizeM % blockSizeM;   
+            // if (sizeN % blockSizeN != 0) 
+            //     exit(0); //blockSizeN -= sizeN % blockSizeN;  
+            // if (sizeK % blockSizeK != 0) 
+            //     exit(0); //blockSizeK -= sizeK % blockSizeK; 
+            // if (sizeM % blockSizeM != 0) 
+            //     blockSizeM -= sizeM % blockSizeM;   
+            // if (sizeN % blockSizeN != 0) 
+            //     blockSizeN -= sizeN % blockSizeN;  
+            // if (sizeK % blockSizeK != 0) 
+            //     blockSizeK -= sizeK % blockSizeK; 
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            for (int i = 0; i < N; i++)
+                AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK);
+            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            timeC = diff(start, end);
+            time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
+            //printf("%f sec\n", time_in_seconds);
+            tacts = time_in_seconds * curProcessor.clock;
+            tacts_theoretical = sizeM * sizeN * sizeK / 16;
+            performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+            // printf("%d tacts\n", tacts);
+            // printf("%d tacts theoretical\n", tacts_theoretical);
+            // printf("%f %% performance\n\n", performance * 100);
+            printf("%f\n", performance * 100);
+            //MatrixPrint(C, sizeM * sizeK, sizeK);
+            break;
         default:
             printf("Function name is incorrect!\n\n");
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);

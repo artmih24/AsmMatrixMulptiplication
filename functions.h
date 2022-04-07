@@ -41,7 +41,9 @@ enum FuncsMatrMul {
     FuncAsmMatrixMulV6,
     FuncAsmMatrixMulV6N,
     FuncAsmMatrixMulBlockV6,
-    FuncAsmMatrixMulBlockV6N
+    FuncAsmMatrixMulBlockV6N,
+    FuncAsmMatrixMulParallelV6,
+    FuncAsmMatrixMulParallelV6N
 };
 
 timespec diff(timespec start, timespec end);
