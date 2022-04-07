@@ -23,7 +23,7 @@ else {
 }
 set xtics 0,step,end
 set ytics 0,5,100
-set yrange [0:100]
+#set yrange [0:100]
 set grid
 set datafile separator ","
 plot "results.csv" using 1:2 with lines lt rgb "red" title columnhead, \

@@ -20,11 +20,11 @@ int AsmMatrixMulParallelV6(float *At, float *B, float *C, int sizeM, int sizeN, 
         *fragB = 0,
         *fragC = 0;
     timespec start, end, timeC;
-    for (m = 0; m < sizeM / blockSizeM; m++) {
-        offsetM = m * blockSizeM;
-        #pragma omp parallel
-        {
-            #pragma omp for
+    #pragma omp parallel
+    {
+        #pragma omp for
+        for (m = 0; m < sizeM / blockSizeM; m++) {
+            offsetM = m * blockSizeM;
             for (n = 0; n < sizeN / blockSizeN; n++) {
                 offsetN = n * blockSizeN;
                 for (k = 0; k < sizeK / blockSizeK; k++) {
