@@ -20,33 +20,30 @@ int AsmMatrixMulParallelV6(float *At, float *B, float *C, int sizeM, int sizeN, 
         *fragB = 0,
         *fragC = 0;
     timespec start, end, timeC;
-    #pragma omp parallel
-    {
-        #pragma omp for
-        for (m = 0; m < sizeM / blockSizeM; m++) {
-            offsetM = m * blockSizeM;
-            for (n = 0; n < sizeN / blockSizeN; n++) {
-                offsetN = n * blockSizeN;
-                for (k = 0; k < sizeK / blockSizeK; k++) {
-                    offsetK = k * blockSizeK;
-                    for (i = 0; i < blockSizeM / 8; i++) {
-                        fragAt = At + (8 * i) + offsetM + (offsetN * sizeM);
-                        for (j = 0; j < blockSizeK / 8; j++) {
-                            fragB = B + (8 * j) + offsetK + (offsetN * sizeK);
-                            fragC = C + (8 * i * sizeK) + (8 * j) + offsetK + (offsetM * sizeK);
-                            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-                            // for (int k = 0; k < 1e6; k++)
-                            AsmPartSumV6(fragAt, fragB, fragC, blockSizeN, sizeK, sizeM);
-                            ////AsmPartSumV6(fragAt, fragB, fragC, blockSizeN, blockSizeK, blockSizeM);
-                            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
-                            // timeC = diff(start, end);
-                            // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e6;
-                            // ////printf("%f sec\n", time_in_seconds);
-                            // u_int64_t tacts = time_in_seconds * i7_4790K_Hz,
-                            //     tacts_theoretical = sizeN * 4;
-                            // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
-                            // printf("%f\n", performance * 100);
-                        }
+    #pragma omp parallel for
+    for (m = 0; m < sizeM / blockSizeM; m++) {
+        offsetM = m * blockSizeM;
+        for (n = 0; n < sizeN / blockSizeN; n++) {
+            offsetN = n * blockSizeN;
+            for (k = 0; k < sizeK / blockSizeK; k++) {
+                offsetK = k * blockSizeK;
+                for (i = 0; i < blockSizeM / 8; i++) {
+                    fragAt = At + (8 * i) + offsetM + (offsetN * sizeM);
+                    for (j = 0; j < blockSizeK / 8; j++) {
+                        fragB = B + (8 * j) + offsetK + (offsetN * sizeK);
+                        fragC = C + (8 * i * sizeK) + (8 * j) + offsetK + (offsetM * sizeK);
+                        // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+                        // for (int k = 0; k < 1e6; k++)
+                        AsmPartSumV6(fragAt, fragB, fragC, blockSizeN, sizeK, sizeM);
+                        ////AsmPartSumV6(fragAt, fragB, fragC, blockSizeN, blockSizeK, blockSizeM);
+                        // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+                        // timeC = diff(start, end);
+                        // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e6;
+                        // ////printf("%f sec\n", time_in_seconds);
+                        // u_int64_t tacts = time_in_seconds * i7_4790K_Hz,
+                        //     tacts_theoretical = sizeN * 4;
+                        // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+                        // printf("%f\n", performance * 100);
                     }
                 }
             }
