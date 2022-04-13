@@ -195,8 +195,8 @@ float MaxDiff(float *C, float *C2, int size, int len) {
         diff = 0;
     for (i = 0; i < size; i++) {
         diff = abs(C[i] - C2[i]);
-        //if (diff > 0)
-            //printf("|%f - %f|[%d, %d] = %f\n", C[i], C2[i], i % len, (int) i / len, diff);
+        if (diff > 0)
+            printf("|%f - %f|[%d][%d] = %f\n", C[i], C2[i], (int) i / len, i % len, diff);
             ////printf("|%f - %f| = %f\n", C[i], C2[i], diff);
         maxDiff = (diff > maxDiff) ? diff : maxDiff;
     }
@@ -209,6 +209,20 @@ float AvgDiff(float *C, float *C2, int size) {
     for (i = 0; i < size; i++)
         sumDiff += abs(C[i] - C2[i]);
     return sumDiff / size;
+}
+
+float MinDiff(float *C, float *C2, int size, int len) {
+    int i = 0;
+    float minDiff = 999999999999999999999.99,
+        diff = 0;
+    for (i = 0; i < size; i++) {
+        diff = abs(C[i] - C2[i]);
+        // if (diff > 0)
+        //     printf("|%f - %f|[%d][%d] = %f\n", C[i], C2[i], (int) i / len, i % len, diff);
+            ////printf("|%f - %f| = %f\n", C[i], C2[i], diff);
+        minDiff = (diff < minDiff) ? diff : minDiff;
+    }
+    return minDiff;
 }
 
 float RelMaxDiff(float *C, float *C2, int size) {
@@ -230,6 +244,19 @@ float RelAvgDiff(float *C, float *C2, int size) {
     for (i = 0; i < size; i++) 
         sumDiff += abs(C[i] - C2[i]) / C[i];
     return sumDiff / size;
+}
+
+float RelMinDiff(float *C, float *C2, int size) {
+    int i = 0;
+    float minDiff = 999999999999999999999.99,
+        diff = 0;
+    for (i = 0; i < size; i++) {
+        diff = abs(C[i] - C2[i]) / C[i];
+        // if (diff > 0)
+        //     printf("|%f - %f| = %f\n", C[i], C2[i], diff);
+        minDiff = (diff < minDiff) ? diff : minDiff;
+    }
+    return minDiff;
 }
 
 int PrintDiff(float *C, float *C2, int size, int len) {

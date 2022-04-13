@@ -4,6 +4,17 @@
 #define in
 #define out
 
-int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, int sizeK, int blockSizeM, int blockSizeN, int blockSizeK, int N = 1);
+int MatrixMulTime(int func, 
+                  float *A, 
+                  float *B, 
+                  float *C, 
+                  int sizeM, 
+                  int sizeN, 
+                  int sizeK, 
+                  int blockSizeM, 
+                  int blockSizeN, 
+                  int blockSizeK, 
+                  int threadsNum, 
+                  int N = 1);
 
 #endif

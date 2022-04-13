@@ -33,7 +33,9 @@ int main(int argc, char* argv[]) {
         blockSizeKmax = p2(9),//9
         blockSizeM = (sizeM < blockSizeMmax) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
         blockSizeN = (sizeN < blockSizeNmax) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
-        blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min;
+        blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min,
+        threadsNum = 8;//sizeM / blockSizeM; 
+    //threadsNum = threadsNum > 8 ? 8 : threadsNum;
     if (sizeN % blockSizeN != 0) 
         sizeN += sizeN - sizeN % blockSizeN;
     if (sizeM % blockSizeM != 0) 
@@ -83,15 +85,15 @@ int main(int argc, char* argv[]) {
     //MatrixTranspose(in A, out At, sizeM, sizeN);
     //MatrixPrintV2(At, sizeA, sizeM);
 
-    //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
-    MatrixMulTime(FuncAsmMatrixMulParallelV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
-    //MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
-    //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, 1);
+    MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
+    MatrixMulTime(FuncAsmMatrixMulParallelV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
+    //MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
+    //MatrixMulTime(FuncAsmMatrixMulV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
     
-    //MatrixPrintV2(C, sizeC, sizeK);
-    //MatrixPrintV2(C2, sizeC, sizeK);
+    // MatrixPrintV2(C, sizeC, sizeK);
+    // MatrixPrintV2(C2, sizeC, sizeK);
 
-    //PrintDiff(C, C2, sizeM * sizeK, sizeK);
+    PrintDiff(C, C2, sizeM * sizeK, sizeK);
 
     delete[] A, B, C, C2, At;
     return 0;

@@ -2,7 +2,18 @@
 #include "MatrixMulFunctions.h"
 #include "MatrixMulSwitch.h"
 
-int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, int sizeK, int blockSizeM, int blockSizeN, int blockSizeK, int N) {
+int MatrixMulTime(int func, 
+                  float *A, 
+                  float *B, 
+                  float *C, 
+                  int sizeM, 
+                  int sizeN, 
+                  int sizeK, 
+                  int blockSizeM, 
+                  int blockSizeN, 
+                  int blockSizeK, 
+                  int threadsNum, 
+                  int N) {
     timespec start, end, timeC;
     double time_in_seconds = 0.0;
     u_int64_t tacts = 0,
@@ -241,7 +252,7 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             // if (sizeK % blockSizeK != 0) 
             //     exit(0); //blockSizeK -= sizeK % blockSizeK; 
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK);
+            AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulParallelV6N):
@@ -259,7 +270,7 @@ int MatrixMulTime(int func, float *A, float *B, float *C, int sizeM, int sizeN, 
             //     blockSizeK -= sizeK % blockSizeK; 
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK);
+                AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
