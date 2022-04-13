@@ -195,8 +195,8 @@ float MaxDiff(float *C, float *C2, int size, int len) {
         diff = 0;
     for (i = 0; i < size; i++) {
         diff = abs(C[i] - C2[i]);
-        if (diff > 0)
-            printf("|%f - %f|[%d][%d] = %f\n", C[i], C2[i], (int) i / len, i % len, diff);
+        // if (diff > 0)
+        //     printf("|%f - %f|[%d][%d] = %f\n", C[i], C2[i], (int) i / len, i % len, diff);
             ////printf("|%f - %f| = %f\n", C[i], C2[i], diff);
         maxDiff = (diff > maxDiff) ? diff : maxDiff;
     }

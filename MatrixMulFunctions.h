@@ -19,6 +19,17 @@ int AsmMatrixMulBlockMKV6(float *At, float *B, float *C, int sizeM, int sizeN, i
 
 int AsmMatrixMulBlockV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK, int blockSizeM, int blockSizeN, int blockSizeK);
 
-int AsmMatrixMulParallelV6(float *At, float *B, float *C, int sizeM, int sizeN, int sizeK, int blockSizeM, int blockSizeN, int blockSizeK, int threadsNum);
+int AsmMatrixMulParallelV6(float *At, 
+                           float *B, 
+                           float *C, 
+                           int sizeM, 
+                           int sizeN, 
+                           int sizeK, 
+                           int blockSizeM, 
+                           int blockSizeN, 
+                           int blockSizeK, 
+                           int threadsNum, 
+                           int threadsCols, 
+                           int threadsRows);
 
 #endif

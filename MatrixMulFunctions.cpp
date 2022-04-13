@@ -15,7 +15,9 @@ int AsmMatrixMulParallelV6(float *At,
                            int blockSizeM, 
                            int blockSizeN, 
                            int blockSizeK,
-                           int threadsNum) {
+                           int threadsNum, 
+                           int threadsCols, 
+                           int threadsRows) {
     int i = 0,
         j = 0,
         k = 0,
@@ -32,28 +34,20 @@ int AsmMatrixMulParallelV6(float *At,
         *threadAt = 0,
         *threadB = 0,
         *threadC = 0;
-    if (blockSizeM / 8 < 8) {
-        blockSizeK /= 64;
-    }
-    else if (blockSizeK / 8 < 8) {
-        blockSizeM /= 64;
-    }
-    else {
-        blockSizeM /= 8;
-        blockSizeK /= 8;
-    }
+    //printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
     timespec start, end, timeC;
-    #pragma omp parallel for private(l)
+    #pragma omp parallel for private(l, fragAt, fragB, fragC, offsetM, offsetN, offsetK, m, n, k, i, j)
     for (l = 0; l < threadsNum; l++) {
-        int threadAt = (((l - l % 4) / 4) * sizeM / 2),
-            threadB = ((l % 4) * sizeK / 4),
+        int threadAt = (((l - l % threadsCols) / threadsCols) * sizeM / threadsRows),
+            threadB = ((l % threadsCols) * sizeK / threadsCols),
             threadC = threadB + threadAt * sizeK;
-        printf("%d | %5d | %3d | %5d\n", l, threadAt * sizeK, threadB, threadC);
-        for (m = 0; m < (sizeM / blockSizeM) / 2; m++) {
+        //printf("%d | %2d | %5d | %3d | %5d\n", l, threadAt, threadAt * sizeK, threadB, threadC);
+        //#pragma omp critical
+        for (m = 0; m < (sizeM / blockSizeM) / threadsRows; m++) {
             offsetM = m * blockSizeM;
             for (n = 0; n < (sizeN / blockSizeN); n++) {
                 offsetN = n * blockSizeN;
-                for (k = 0; k < (sizeK / blockSizeK) / 4; k++) {
+                for (k = 0; k < (sizeK / blockSizeK) / threadsCols; k++) {
                     offsetK = k * blockSizeK;
                     for (i = 0; i < (blockSizeM / 8); i++) {
                         fragAt = At + (8 * i) + offsetM + (offsetN * sizeM) + threadAt;

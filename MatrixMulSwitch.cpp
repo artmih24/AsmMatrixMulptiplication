@@ -33,6 +33,8 @@ int MatrixMulTime(int func,
     i5_9600KF.sizeCacheL3 = 9e6;
     Processor curProcessor = i7_4790K;
     float *At = new float[sizeM * sizeN];
+    int threadsCols = 0,
+        threadsRows = 0;
     MatrixTranspose(in A, out At, sizeM, sizeN);
     switch (func) {
         case (FuncMatrixMul):
@@ -251,8 +253,22 @@ int MatrixMulTime(int func,
             //     exit(0); //blockSizeN -= sizeN % blockSizeN;  
             // if (sizeK % blockSizeK != 0) 
             //     exit(0); //blockSizeK -= sizeK % blockSizeK; 
+            if (blockSizeM < threadsNum * threadsNum || blockSizeK < threadsNum * threadsNum) {
+                blockSizeM = threadsNum;
+                blockSizeK = threadsNum;
+                threadsRows = 4;
+                threadsCols = 2;
+            }
+            else {
+                blockSizeM /= threadsNum;
+                blockSizeK /= threadsNum;
+                threadsCols = 4;
+                threadsRows = 2;
+            }
+            if (blockSizeM % 8 != 0 || blockSizeK % 8 != 0)
+                exit(0);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
-            AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum);
+            AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, threadsCols, threadsRows);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             break;
         case (FuncAsmMatrixMulParallelV6N):
@@ -268,9 +284,46 @@ int MatrixMulTime(int func,
             //     blockSizeN -= sizeN % blockSizeN;  
             // if (sizeK % blockSizeK != 0) 
             //     blockSizeK -= sizeK % blockSizeK; 
+            //printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
+            // if (blockSizeM < threadsNum * threadsNum) {
+            //     blockSizeK /= (threadsNum * threadsNum);
+            //     threadsCols = 1;
+            //     threadsRows = 8;
+            // }
+            // else if (blockSizeM < threadsNum * threadsNum / 2) {
+            //     blockSizeK /= (threadsNum * threadsNum / 2);
+            //     threadsCols = 1;
+            //     threadsRows = 8;
+            // }
+            // else if (blockSizeK < threadsNum * threadsNum) {
+            //     blockSizeM /= (threadsNum * threadsNum);
+            //     threadsCols = 8;
+            //     threadsRows = 1;
+            // }
+            // else if (blockSizeK < threadsNum * threadsNum / 2) {
+            //     blockSizeM /= (threadsNum * threadsNum / 2);
+            //     threadsCols = 8;
+            //     threadsRows = 1;
+            // }
+            if (blockSizeM < threadsNum * threadsNum || blockSizeK < threadsNum * threadsNum) {
+                blockSizeM = threadsNum;
+                blockSizeK = threadsNum;
+                threadsRows = 4;
+                threadsCols = 2;
+            }
+            else {
+                blockSizeM /= threadsNum;
+                blockSizeK /= threadsNum;
+                threadsCols = 4;
+                threadsRows = 2;
+            }
+            // printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
+            // printf("size %d | %d | %d\n", sizeM, sizeN, sizeK);
+            if (sizeM % 32 != 0 || sizeK % 16 != 0 || sizeK < 32 || sizeM < 16)
+                exit(0);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
-                AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum);
+                AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, threadsCols, threadsRows);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
             timeC = diff(start, end);
             time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
