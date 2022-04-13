@@ -54,7 +54,7 @@ else
     fi
 fi
 
-N=9;
+N=15;
 
 echo "---- Bash script ----"
 echo "const M = "$Mconst", N = "$Nconst", K = "$Kconst
@@ -109,6 +109,30 @@ do
     PerformanceM=$(bc <<< "scale=6; $PerformanceM / $N")
     PerformanceN=$(bc <<< "scale=6; $PerformanceN / $N")
     PerformanceK=$(bc <<< "scale=6; $PerformanceK / $N")
+    if (($(bc <<< "scale=6; $PerformanceM == 0")))
+    then
+        PerformanceM=""
+    fi
+    if (($(bc <<< "scale=6; $PerformanceN == 0")))
+    then
+        PerformanceN=""
+    fi
+    if (($(bc <<< "scale=6; $PerformanceK == 0")))
+    then
+        PerformanceK=""
+    fi
+    if (($(bc <<< "scale=6; $PerformanceMmax == 0")))
+    then
+        PerformanceMmax=""
+    fi
+    if (($(bc <<< "scale=6; $PerformanceNmax == 0")))
+    then
+        PerformanceNmax=""
+    fi
+    if (($(bc <<< "scale=6; $PerformanceKmax == 0")))
+    then
+        PerformanceKmax=""
+    fi
     echo $i","$PerformanceM","$PerformanceN","$PerformanceK","$PerformanceMmax","$PerformanceNmax","$PerformanceKmax  >> 'results.csv'
 done
 
