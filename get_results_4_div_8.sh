@@ -60,7 +60,7 @@ echo "---- Bash script ----"
 echo "const M = "$Mconst", N = "$Nconst", K = "$Kconst
 echo "start = "$start", step = "$step", end = "$end
 
-echo "M/N/K,Performance(M),Performance(N),Performance(K),Performance(M)max,Performance(N)max,Performance(K)max" > 'results_4.csv'
+echo "M/N/K,Performance(M),Performance(N),Performance(K),Performance(M)max,Performance(N)max,Performance(K)max" > 'results_4_div_8.csv'
 
 for (( i=$start; i<=$end; i+=$step ))
 do
@@ -106,9 +106,12 @@ do
             fi
         fi
     done
-    PerformanceM=$(bc <<< "scale=6; $PerformanceM / $N")
-    PerformanceN=$(bc <<< "scale=6; $PerformanceN / $N")
-    PerformanceK=$(bc <<< "scale=6; $PerformanceK / $N")
+    PerformanceM=$(bc <<< "scale=6; ($PerformanceM / $N) / 8")
+    PerformanceN=$(bc <<< "scale=6; ($PerformanceN / $N) / 8")
+    PerformanceK=$(bc <<< "scale=6; ($PerformanceK / $N) / 8")
+    PerformanceMmax=$(bc <<< "scale=6; $PerformanceMmax / 8")
+    PerformanceNmax=$(bc <<< "scale=6; $PerformanceNmax / 8")
+    PerformanceKmax=$(bc <<< "scale=6; $PerformanceKmax / 8")
     if (($(bc <<< "scale=6; $PerformanceM < 1")))
     then
         PerformanceM="0"$PerformanceM
@@ -157,7 +160,7 @@ do
     then
         PerformanceKmax=""
     fi
-    echo $i","$PerformanceM","$PerformanceN","$PerformanceK","$PerformanceMmax","$PerformanceNmax","$PerformanceKmax  >> 'results_4.csv'
+    echo $i","$PerformanceM","$PerformanceN","$PerformanceK","$PerformanceMmax","$PerformanceNmax","$PerformanceKmax  >> 'results_4_div_8.csv'
 done
 
-gnuplot -c gnuplot_commands_4.plt $end $(($end/32))
+gnuplot -c gnuplot_commands_4_div_8.plt $end $(($end/32))

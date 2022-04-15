@@ -13,6 +13,7 @@
 #define i5_9600KF_Hz 3.7e9
 
 #define p2(x) 1 << x
+#define p8(x) 1 << (3 * x)
 
 struct Processor {
     u_int64_t clock;
