@@ -308,19 +308,21 @@ int MatrixMulTime(int func,
             if (blockSizeM < threadsNum * threadsNum || blockSizeK < threadsNum * threadsNum) {
                 blockSizeM = threadsNum;
                 blockSizeK = threadsNum;
-                threadsRows = 4;
-                threadsCols = 2;
+                threadsRows = 2;//4;
+                threadsCols = 4;//2;
             }
             else {
                 blockSizeM /= threadsNum;
                 blockSizeK /= threadsNum;
-                threadsCols = 4;
-                threadsRows = 2;
+                threadsCols = 2;//4;
+                threadsRows = 4;//2;
             }
             // printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
             // printf("size %d | %d | %d\n", sizeM, sizeN, sizeK);
             if (sizeM % 32 != 0 || sizeK % 16 != 0 || sizeK < 32 || sizeM < 16)
                 exit(0);
+            // if (sizeM % 64 != 0 || sizeK % 16 != 0 || sizeK < 64 || sizeM < 16)
+            //     exit(0);
             clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
             for (int i = 0; i < N; i++)
                 AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, threadsCols, threadsRows);

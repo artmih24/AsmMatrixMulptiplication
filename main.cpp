@@ -29,9 +29,9 @@ int main(int argc, char* argv[]) {
             printf("Can't read file\n");
     }
     int blockSize_min = 8,
-        blockSizeMmax = p2(9),//p2(7),//7
+        blockSizeMmax = p2(8),//p2(7),//7
         blockSizeNmax = p2(5),//p2(5),//5
-        blockSizeKmax = p2(11),//p2(9),//9
+        blockSizeKmax = p2(8),//p2(9),//9
         blockSizeM = (sizeM < blockSizeMmax) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
         blockSizeN = (sizeN < blockSizeNmax) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
         blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min,

@@ -62,6 +62,8 @@ echo "start = "$start", step = "$step", end = "$end
 
 echo "M/N/K,Performance(M),Performance(N),Performance(K),Performance(M)max,Performance(N)max,Performance(K)max" > 'results_4_div_8.csv'
 
+startTime=$(date +%s)
+
 for (( i=$start; i<=$end; i+=$step ))
 do
     PerformanceM=0
@@ -162,5 +164,20 @@ do
     fi
     echo $i","$PerformanceM","$PerformanceN","$PerformanceK","$PerformanceMmax","$PerformanceNmax","$PerformanceKmax  >> 'results_4_div_8.csv'
 done
+
+endTime=$(date +%s)
+timeDiffSeconds=$(($endTime - $startTime))
+timeDiffMinutes=$(($timeDiffSeconds / 60))
+if [ $timeDiffMinutes -gt 0 ]
+then
+    timeDiffSeconds=$(($timeDiffSeconds % 60))
+    if [ $timeDiffSeconds -lt 10 ]
+    then
+        timeDiffSeconds="0"$timeDiffSeconds
+    fi
+    echo "time spent: "$timeDiffMinutes" m "$timeDiffSeconds" s"
+else
+    echo "time spent: "$timeDiffSeconds" s"
+fi
 
 gnuplot -c gnuplot_commands_4_div_8.plt $end $(($end/32))
