@@ -12,13 +12,6 @@ if (start eq "") {
 else {
      print "start = ", start
 }
-if (end eq "") {
-     end = 8192
-     print "default end = ", end
-}
-else {
-     print "end = ", end
-}
 if (step eq "") {
      step = 256
      print "default step = ", step
@@ -29,16 +22,25 @@ else {
      }
      print "step = ", step
 }
+if (end eq "") {
+     end = 8192
+     print "default end = ", end
+}
+else {
+     print "end = ", end
+}
 set xtics 0,step,end
 set ytics 0,5,200
+#set ytics 0,50,800
 set xrange [start:end]
 set yrange [0:200]
+#set yrange [0:800]
 set grid
 set datafile separator ","
-plot "results_4.csv" using 1:2 with lines lt rgb "red" title columnhead, \
-     "results_4.csv" using 1:3 with lines lt rgb "#009900" title columnhead, \
-     "results_4.csv" using 1:4 with lines lt rgb "blue" title columnhead, \
-     "results_4.csv" using 1:5 with lines lt rgb "red" dt 2 title columnhead, \
-     "results_4.csv" using 1:6 with lines lt rgb "#009900" dt 2 title columnhead, \
-     "results_4.csv" using 1:7 with lines lt rgb "blue" dt 2 title columnhead
+plot "results_4.csv" using 1:2 with lines linetype rgb "red" title columnhead, \
+     "results_4.csv" using 1:3 with lines linetype rgb "#009900" title columnhead, \
+     "results_4.csv" using 1:4 with lines linetype rgb "blue" title columnhead, \
+     "results_4.csv" using 1:5 with lines linetype rgb "red" dt 2 title columnhead, \
+     "results_4.csv" using 1:6 with lines linetype rgb "#009900" dt 2 title columnhead, \
+     "results_4.csv" using 1:7 with lines linetype rgb "blue" dt 2 title columnhead
 pause -1
