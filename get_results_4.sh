@@ -177,4 +177,4 @@ else
     echo "time spent: "$timeDiffSeconds" s"
 fi
 
-gnuplot -c gnuplot_commands_4.plt $end $(($end/32))
+gnuplot -c gnuplot_commands_4.plt $end $(($end/32)) $start

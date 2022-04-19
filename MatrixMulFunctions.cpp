@@ -34,24 +34,29 @@ int AsmMatrixMulParallelV6(float *At,
         *threadAt = 0,
         *threadB = 0,
         *threadC = 0;
+    int blocksM = (sizeM / blockSizeM) / threadsRows,
+        blocksN = (sizeN / blockSizeN),
+        blocksK = (sizeK / blockSizeK) / threadsCols,
+        blocksI = (blockSizeM / 8),
+        blocksJ = (blockSizeK / 8);
     //printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
-    timespec start, end, timeC;
+    //timespec start, end, timeC;
     #pragma omp parallel for private(l, fragAt, fragB, fragC, offsetM, offsetN, offsetK, m, n, k, i, j)
-    for (l = 0; l < threadsNum; l++) {
+    for (l = 0; l < threadsRows * threadsCols; l++) {
         int threadAt = (((l - l % threadsCols) / threadsCols) * sizeM / threadsRows),
             threadB = ((l % threadsCols) * sizeK / threadsCols),
             threadC = threadB + threadAt * sizeK;
         //printf("%d | %2d | %5d | %3d | %5d\n", l, threadAt, threadAt * sizeK, threadB, threadC);
         //#pragma omp critical
-        for (m = 0; m < (sizeM / blockSizeM) / threadsRows; m++) {
+        for (m = 0; m < blocksM; m++) {
             offsetM = m * blockSizeM;
-            for (n = 0; n < (sizeN / blockSizeN); n++) {
+            for (n = 0; n < blocksN; n++) {
                 offsetN = n * blockSizeN;
-                for (k = 0; k < (sizeK / blockSizeK) / threadsCols; k++) {
+                for (k = 0; k < blocksK; k++) {
                     offsetK = k * blockSizeK;
-                    for (i = 0; i < (blockSizeM / 8); i++) {
+                    for (i = 0; i < blocksI; i++) {
                         fragAt = At + (8 * i) + offsetM + (offsetN * sizeM) + threadAt;
-                        for (j = 0; j < (blockSizeK / 8); j++) {
+                        for (j = 0; j < blocksJ; j++) {
                             fragB = B + (8 * j) + offsetK + (offsetN * sizeK) + threadB;
                             fragC = C + (8 * i * sizeK) + (8 * j) + offsetK + (offsetM * sizeK) + threadC;
                             // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);

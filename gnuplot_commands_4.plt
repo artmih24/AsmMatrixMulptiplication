@@ -4,6 +4,14 @@
 print "---- Gnuplot script ----"
 end = ARG1
 step = ARG2
+start = ARG3
+if (start eq "") {
+     start = 0
+     print "default start = ", start
+}
+else {
+     print "start = ", start
+}
 if (end eq "") {
      end = 8192
      print "default end = ", end
@@ -23,6 +31,7 @@ else {
 }
 set xtics 0,step,end
 set ytics 0,5,200
+set xrange [start:end]
 set yrange [0:200]
 set grid
 set datafile separator ","

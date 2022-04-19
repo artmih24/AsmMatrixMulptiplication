@@ -1,6 +1,7 @@
 #include "functions.h"
 #include "MatrixMulFunctions.h"
 #include "MatrixMulSwitch.h"
+#include <omp.h>
 
 int MatrixMulTime(int func, 
                   float *A, 
@@ -15,7 +16,7 @@ int MatrixMulTime(int func,
                   int threadsNum, 
                   int N) {
     timespec start, end, timeC;
-    double time_in_seconds = 0.0;
+    double time_in_seconds = 0.0, omp_start, omp_end;
     u_int64_t tacts = 0,
         tacts_theoretical = 0;
     float performance = 0.0;
@@ -308,27 +309,30 @@ int MatrixMulTime(int func,
             if (blockSizeM < threadsNum * threadsNum || blockSizeK < threadsNum * threadsNum) {
                 blockSizeM = threadsNum;
                 blockSizeK = threadsNum;
-                threadsRows = 2;//4;
-                threadsCols = 4;//2;
+                threadsRows = 1;//4;
+                threadsCols = 8;//2;
             }
             else {
                 blockSizeM /= threadsNum;
                 blockSizeK /= threadsNum;
-                threadsCols = 2;//4;
-                threadsRows = 4;//2;
+                threadsCols = 1;//4;
+                threadsRows = 8;//2;
             }
             // printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
             // printf("size %d | %d | %d\n", sizeM, sizeN, sizeK);
-            if (sizeM % 32 != 0 || sizeK % 16 != 0 || sizeK < 32 || sizeM < 16)
-                exit(0);
-            // if (sizeM % 64 != 0 || sizeK % 16 != 0 || sizeK < 64 || sizeM < 16)
+            // if (sizeM % 32 != 0 || sizeK % 16 != 0 || sizeK < 32 || sizeM < 16)
             //     exit(0);
-            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            if (sizeM % 64 != 0 || sizeK % 16 != 0 || sizeK < 64 || sizeM < 16)
+                exit(0);
+            //clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+            omp_start = omp_get_wtime();
             for (int i = 0; i < N; i++)
                 AsmMatrixMulParallelV6(in At, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, threadsCols, threadsRows);
-            clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
-            timeC = diff(start, end);
-            time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
+            omp_end = omp_get_wtime();
+            time_in_seconds = abs(omp_end - omp_start) / static_cast<double>(N);
+            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+            // timeC = diff(start, end);
+            // time_in_seconds = (static_cast<double>(timeC.tv_sec) + static_cast<double>(timeC.tv_nsec) / 1.0e9) / static_cast<double>(N);
             //printf("%f sec\n", time_in_seconds);
             tacts = time_in_seconds * curProcessor.clock;
             tacts_theoretical = sizeM * sizeN * sizeK / 16;

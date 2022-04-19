@@ -14,7 +14,7 @@ MatrixMulFunctions.o: MatrixMulFunctions.cpp
 	g++ -c -O0 -fopenmp MatrixMulFunctions.cpp 
 
 MatrixMulSwitch.o: MatrixMulSwitch.cpp
-	g++ -c -O0 MatrixMulSwitch.cpp
+	g++ -c -O0 -fopenmp MatrixMulSwitch.cpp
 
 clean:
 	rm -rf *.o a.out
