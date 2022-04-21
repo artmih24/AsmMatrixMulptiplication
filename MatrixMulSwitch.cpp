@@ -313,10 +313,13 @@ int MatrixMulTime(int func,
                 threadsCols = 8;//2;
             }
             else {
-                blockSizeM /= threadsNum;
-                blockSizeK /= threadsNum;
                 threadsCols = 1;//4;
                 threadsRows = 8;//2;
+                blockSizeM /= 8;
+                blockSizeK /= 8;
+                blockSizeM = (sizeM % 128 == 0) ? (sizeM == 128) ? p2(4) : p2(5) : p2(3);
+                blockSizeN = p2(7);
+                blockSizeK = p2(6);
             }
             // printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
             // printf("size %d | %d | %d\n", sizeM, sizeN, sizeK);

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <omp.h>
+#include <iostream>
 
 
 int AsmMatrixMulParallelV6(float *At, 
@@ -18,6 +19,93 @@ int AsmMatrixMulParallelV6(float *At,
                            int threadsNum, 
                            int threadsCols, 
                            int threadsRows) {
+    int i = 0,
+        j = 0,
+        k = 0,
+        l = 0,
+        m = 0,
+        n = 0,
+        offsetM = 0,
+        offsetN = 0,
+        offsetK = 0;
+    omp_set_num_threads(threadsNum); 
+    float *fragAt = 0,
+        *fragB = 0,
+        *fragC = 0,
+        *threadAt = 0,
+        *threadB = 0,
+        *threadC = 0;
+    int blocksM = (sizeM / blockSizeM) / threadsRows,//(sizeM / blockSizeM) / threadsRows,
+        blocksN = (sizeN / blockSizeN),
+        blocksK = (sizeK / blockSizeK) / threadsCols,
+        blocksI = (blockSizeM / 8),
+        blocksJ = (blockSizeK / 8);
+    // printf("size       %d | %d | %d\n", sizeM, sizeN, sizeK);
+    // printf("block size %d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
+    // printf("blocks     %d | %d | %d\n", blocksM, blocksN, blocksK);
+    // printf("threads    %d | %d | %d\n", threadsRows, 1, threadsCols);
+    //timespec start, end, timeC;
+    //printf("=== %d \n", C);
+    #pragma omp parallel private(fragAt, fragB, fragC, offsetM, offsetN, offsetK, m, n, k, i, j) num_threads(threadsNum)
+    {
+        
+        int threadNum = omp_get_thread_num(),
+            curBlocksM = ((threadNum - threadNum % threadsCols) / threadsCols) * blocksM,
+            nxtBlocksM = (((threadNum - threadNum % threadsCols) / threadsCols) + 1) * blocksM,
+            curBlocksK = (threadNum % threadsCols) * blocksK,
+            nxtBlocksK = ((threadNum % threadsCols) + 1) * blocksK;//,
+            // threadAt = (((threadNum - threadNum % threadsCols) / threadsCols) * sizeM / threadsRows),
+            // threadB = ((threadNum % threadsCols) * sizeK / threadsCols),
+            // threadC = threadB + threadAt * sizeK;
+        // printf("%d | %2d | %5d | %3d | %5d\n", threadNum, 
+        // ((threadNum - threadNum % threadsCols) / threadsCols) * blocksM, (((threadNum - threadNum % threadsCols) / threadsCols) + 1) * blocksM, 
+        // threadsCols, blocksM);
+        //#pragma omp critical
+        for (m = curBlocksM; m < nxtBlocksM; m++) {
+            offsetM = m * blockSizeM;
+            for (n = 0; n < blocksN; n++) {
+                offsetN = n * blockSizeN;
+                for (k = curBlocksK; k < nxtBlocksK; k++) {
+                    offsetK = k * blockSizeK;
+                    for (i = 0; i < blocksI; i++) {
+                        fragAt = At + (8 * i) + offsetM + (offsetN * sizeM);// + threadAt;
+                        for (j = 0; j < blocksJ; j++) {
+                            fragB = B + (8 * j) + offsetK + (offsetN * sizeK);// + threadB;
+                            fragC = C + (8 * i * sizeK) + (8 * j) + offsetK + (offsetM * sizeK);// + threadC;
+                            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &start);
+                            // for (int k = 0; k < 1e6; k++)
+                            //printf("%d \n", C);
+                            AsmPartSumV6(fragAt, fragB, fragC, blockSizeN, sizeK, sizeM);
+                            ////AsmPartSumV6(fragAt, fragB, fragC, blockSizeN, blockSizeK, blockSizeM);
+                            // clock_gettime(CLOCK_THREAD_CPUTIME_ID, &end);
+                            // timeC = diff(start, end);
+                            // double time_in_seconds = (timeC.tv_sec + timeC.tv_nsec / 1.0e9) / 1.0e6;
+                            // ////printf("%f sec\n", time_in_seconds);
+                            // u_int64_t tacts = time_in_seconds * i7_4790K_Hz,
+                            //     tacts_theoretical = sizeN * 4;
+                            // float performance = static_cast<float>(tacts_theoretical) / static_cast<float>(tacts);
+                            // printf("%f\n", performance * 100);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+int AsmMatrixMulParallelV6_old(float *At, 
+                               float *B, 
+                               float *C, 
+                               int sizeM, 
+                               int sizeN, 
+                               int sizeK, 
+                               int blockSizeM, 
+                               int blockSizeN, 
+                               int blockSizeK,
+                               int threadsNum, 
+                               int threadsCols, 
+                               int threadsRows) {
     int i = 0,
         j = 0,
         k = 0,

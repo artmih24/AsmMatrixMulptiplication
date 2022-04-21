@@ -31,11 +31,13 @@ else {
 }
 set xtics 0,step,end
 set ytics 0,5,200
+set ytics 0,10,500
 #set ytics 0,50,800
 set xrange [start:end]
 set yrange [0:200]
+set yrange [0:500]
 #set yrange [0:800]
-set grid
+set grid xtics ytics linecolor rgb "#000000" #linestyle 8
 set datafile separator ","
 plot "results_4.csv" using 1:2 with lines linetype rgb "red" title columnhead, \
      "results_4.csv" using 1:3 with lines linetype rgb "#009900" title columnhead, \
