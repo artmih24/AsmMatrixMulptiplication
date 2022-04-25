@@ -306,21 +306,29 @@ int MatrixMulTime(int func,
             //     threadsCols = 8;
             //     threadsRows = 1;
             // }
-            if (blockSizeM < threadsNum * threadsNum || blockSizeK < threadsNum * threadsNum) {
-                blockSizeM = threadsNum;
-                blockSizeK = threadsNum;
-                threadsRows = 1;//4;
-                threadsCols = 8;//2;
-            }
-            else {
-                threadsCols = 1;//4;
-                threadsRows = 8;//2;
-                blockSizeM /= 8;
-                blockSizeK /= 8;
-                blockSizeM = (sizeM % 128 == 0) ? (sizeM == 128) ? p2(4) : p2(5) : p2(3);
-                blockSizeN = p2(7);
-                blockSizeK = p2(6);
-            }
+            // if (blockSizeM < threadsNum * threadsNum || blockSizeK < threadsNum * threadsNum) {
+            //     blockSizeM = threadsNum;
+            //     blockSizeK = threadsNum;
+            //     threadsRows = 1;//4;
+            //     threadsCols = 8;//2;
+            // }
+            // else {
+            //     threadsCols = 1;//4;
+            //     threadsRows = 8;//2;
+            //     // blockSizeM /= 8;
+            //     // blockSizeK /= 8;
+            //     //blockSizeM = (sizeM % 128 == 0) ? (sizeM == 128) ? p2(4) : sizeM / threadsNum : p2(3);//p2(5);
+            //     blockSizeM = (sizeM % 128 != 0) ? p2(3) : (sizeM == 128) ? p2(4) : p2(5);//sizeM / threadsNum;//p2(5);
+            //     blockSizeN = p2(7);
+            //     blockSizeK = p2(6);
+            // }
+            blockSizeM = p2(5);//p2(5);// min p2(3)
+            blockSizeN = (blockSizeN < threadsNum * threadsNum) ? 8 : p2(4);//p2(4);// min p2(3)
+            blockSizeK = (blockSizeK < threadsNum * threadsNum) ? 8 : p2(7);//p2(5);// min p2(3)
+            threadsCols = 1;
+            threadsRows = sizeM / blockSizeM;
+            if (blockSizeM * threadsRows != sizeM)
+                exit(0);
             // printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
             // printf("size %d | %d | %d\n", sizeM, sizeN, sizeK);
             // if (sizeM % 32 != 0 || sizeK % 16 != 0 || sizeK < 32 || sizeM < 16)

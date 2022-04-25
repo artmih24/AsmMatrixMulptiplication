@@ -64,17 +64,43 @@ int main(int argc, char* argv[]) {
     MatrixInitBy0(C, sizeC);
     MatrixInitBy0(C2, sizeC);
     MatrixInitBy0(At, sizeA);
+    char argRandomDiff[] = "--random_diff",
+        argRD[] = "--RD",
+        argIncrementDiff[] = "--increment_diff",
+        argID[] = "--ID",
+        argRandomMatrix[] = "--random_matrix",
+        argRM[] = "--RM",
+        argIncrementMatrix[] = "--increment_matrix",
+        argIM[] = "--IM",
+        argRandomDiffMatrix[] = "--random_diff_matrix",
+        argRDM[] = "--RDM",
+        argIncrementDiffMatrix[] = "--increment_diff_matrix",
+        argIDM[] = "--IDM";
     if (argc == 5) {
         char argRandom[] = "--random",
             argR[] = "--R",
             argIncrement[] = "--increment",
             argI[] = "--I";
-        if (compare(argv[1], argRandom) || compare(argv[1], argR)) {
+        if (compare(argv[1], argRandom) || 
+            compare(argv[1], argR) ||
+            compare(argv[1], argRandomDiff) || 
+            compare(argv[1], argRD) ||
+            compare(argv[1], argRandomMatrix) || 
+            compare(argv[1], argRM) ||
+            compare(argv[1], argRandomDiffMatrix) || 
+            compare(argv[1], argRDM)) {
             srand(time(0)); 
             MatrixInitByRnd(out A, sizeA);
             MatrixInitByRnd(out B, sizeB);
         }
-        else if (compare(argv[1], argIncrement) || compare(argv[1], argI)) {
+        else if (compare(argv[1], argIncrement) || 
+                 compare(argv[1], argI) ||
+                 compare(argv[1], argIncrementDiff) || 
+                 compare(argv[1], argID) ||
+                 compare(argv[1], argIncrementMatrix) || 
+                 compare(argv[1], argIM) ||
+                 compare(argv[1], argIncrementDiffMatrix) || 
+                 compare(argv[1], argIDM)) {
             MatrixInitByIncrement(out A, sizeM, sizeN);
             MatrixInitByIncrement(out B, sizeN, sizeK, 5);
         }
@@ -93,6 +119,16 @@ int main(int argc, char* argv[]) {
     //MatrixTranspose(in A, out At, sizeM, sizeN);
     //MatrixPrintV2(At, sizeA, sizeM);
 
+    if (compare(argv[1], argIncrementDiff) || 
+        compare(argv[1], argID) ||
+        compare(argv[1], argRandomDiff) || 
+        compare(argv[1], argRD) ||
+        compare(argv[1], argIncrementDiffMatrix) || 
+        compare(argv[1], argIDM) ||
+        compare(argv[1], argRandomDiffMatrix) || 
+        compare(argv[1], argRDM))
+        MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
+
     //MatrixMulTime(FuncMatrixMul1, in A, in B, out C, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
     MatrixMulTime(FuncAsmMatrixMulParallelV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
     //MatrixMulTime(FuncAsmMatrixMulBlockV6N, in A, in B, out C2, sizeM, sizeN, sizeK, blockSizeM, blockSizeN, blockSizeK, threadsNum, 1);
@@ -101,7 +137,25 @@ int main(int argc, char* argv[]) {
     // MatrixPrintV2(C, sizeC, sizeK);
     // MatrixPrintV2(C2, sizeC, sizeK);
 
-    //PrintDiff(C, C2, sizeM * sizeK, sizeK);
+    if (compare(argv[1], argRandomMatrix) ||
+        compare(argv[1], argRM) ||
+        compare(argv[1], argRandomDiffMatrix) ||
+        compare(argv[1], argRDM) ||
+        compare(argv[1], argIncrementMatrix) ||
+        compare(argv[1], argIM) ||
+        compare(argv[1], argIncrementDiffMatrix) ||
+        compare(argv[1], argIDM))
+        MatrixPrintV2(C2, sizeC, sizeK);
+
+    if (compare(argv[1], argIncrementDiff) || 
+        compare(argv[1], argID) ||
+        compare(argv[1], argRandomDiff) || 
+        compare(argv[1], argRD) ||
+        compare(argv[1], argIncrementDiffMatrix) || 
+        compare(argv[1], argIDM) ||
+        compare(argv[1], argRandomDiffMatrix) || 
+        compare(argv[1], argRDM))
+        PrintDiff(C, C2, sizeM * sizeK, sizeK);
 
     delete[] A, B, C, C2, At;
     return 0;
