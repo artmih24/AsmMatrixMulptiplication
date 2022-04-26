@@ -322,9 +322,9 @@ int MatrixMulTime(int func,
             //     blockSizeN = p2(7);
             //     blockSizeK = p2(6);
             // }
-            blockSizeM = p2(5);//p2(5);// min p2(3)
-            blockSizeN = (blockSizeN < threadsNum * threadsNum) ? 8 : p2(4);//p2(4);// min p2(3)
-            blockSizeK = (blockSizeK < threadsNum * threadsNum) ? 8 : p2(7);//p2(5);// min p2(3)
+            blockSizeM = p2(3);//p2(5);// min p2(3)
+            blockSizeN = (blockSizeN < threadsNum * threadsNum) ? 8 : p2(5);//p2(4);// min p2(3)
+            blockSizeK = (blockSizeK < threadsNum * threadsNum) ? 8 : p2(6);//p2(5);// min p2(3)
             threadsCols = 1;
             threadsRows = sizeM / blockSizeM;
             if (blockSizeM * threadsRows != sizeM)

@@ -4,7 +4,7 @@
 
 if [ $# -eq 1 ] 
 then
-    if [ $1 -ge 4096 ]
+    if [ $1 -ge 2048 ]
     then
         Mconst=128; Nconst=128; Kconst=128; start=8; step=8; end=$1
     else
@@ -20,7 +20,7 @@ then
     fi
 elif [ $# -eq 3 ] 
 then
-    if [ $3 -ge 4096 ]
+    if [ $3 -ge 2048 ]
     then
         Mconst=$1; Nconst=$1; Kconst=$1; start=$2; step=$2; end=$3
     else

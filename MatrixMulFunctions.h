@@ -45,6 +45,19 @@ int AsmMatrixMulParallelV6_8(float *At,
                              int threadsCols, 
                              int threadsRows);
 
+int AsmMatrixMulParallelV6_25_04(float *At, 
+                                 float *B, 
+                                 float *C, 
+                                 int sizeM, 
+                                 int sizeN, 
+                                 int sizeK, 
+                                 int blockSizeM, 
+                                 int blockSizeN, 
+                                 int blockSizeK, 
+                                 int threadsNum, 
+                                 int threadsCols, 
+                                 int threadsRows);
+
 int AsmMatrixMulParallelV6(float *At, 
                            float *B, 
                            float *C, 
