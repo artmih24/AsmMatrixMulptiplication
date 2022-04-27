@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
         blockSizeM = (sizeM < blockSizeMmax) ? sizeM : (blockSizeMmax > blockSize_min) ? blockSizeMmax : blockSize_min,
         blockSizeN = (sizeN < blockSizeNmax) ? sizeN : (blockSizeNmax > blockSize_min) ? blockSizeNmax : blockSize_min,
         blockSizeK = (sizeK < blockSizeKmax) ? sizeK : (blockSizeKmax > blockSize_min) ? blockSizeKmax : blockSize_min,
-        threadsNum = 8;//sizeM / blockSizeM; 
+        threadsNum = 4;//sizeM / blockSizeM; 
     //threadsNum = threadsNum > 8 ? 8 : threadsNum;
     //printf("%d | %d | %d\n", blockSizeM, blockSizeN, blockSizeK);
     // if (blockSizeM % 32 != 0) 

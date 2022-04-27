@@ -141,7 +141,7 @@ if [ $timeDiffMinutes -gt 0 ]; then
     echo "time spent: "$timeDiffMinutes" m "$timeDiffSeconds" s"
 else
     printf '\033[1A'
-    echo "time spent: "$timeDiffSeconds" s    "
+    echo "time spent: "$timeDiffSeconds" s     "
 fi
 
 gnuplot -c gnuplot_commands_4.plt $end $(($end/32)) $start $N
